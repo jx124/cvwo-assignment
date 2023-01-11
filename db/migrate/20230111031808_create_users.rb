@@ -1,7 +1,7 @@
 class CreateUsers < ActiveRecord::Migration[7.0]
   def change
     create_table :users do |t|
-      t.integer :id, null: false
+      # t.integer :id, null: false
       t.integer :token, null: false
       t.string :username, null: false
 
