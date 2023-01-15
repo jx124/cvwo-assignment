@@ -1,11 +1,9 @@
 Rails.application.routes.draw do
   resources :comments
   resources :posts
-  resources :users only: [:create]
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  resources :users, only: [:create]
 
-  # Defines the root path route ("/")
-  # root "articles#index"
+  root "posts#index"
   post "/login", to: "users#login"
   get "/auto_login", to: "users#auto_login"
 end
