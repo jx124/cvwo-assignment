@@ -1,6 +1,7 @@
 class PostsController < ApplicationController
   before_action :set_post, only: %i[ show edit update destroy ]
   skip_before_action :verify_authenticity_token
+  skip_before_action :authorized, only: %i[ index ]
 
   # GET /posts or /posts.json
   def index
@@ -23,6 +24,7 @@ class PostsController < ApplicationController
   # POST /posts or /posts.json
   def create
     @post = Post.new(post_params)
+    @post.user_id = @user.id
 
     respond_to do |format|
       if @post.save
