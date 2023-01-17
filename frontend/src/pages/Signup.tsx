@@ -2,8 +2,8 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import LoginForm from '../features/auth/LoginForm'
 
-function Login() {
-  const hyperlink = <Link to="/signup">sign up</Link>;
+function Signup() {
+  const hyperlink = <Link to="/login">log in</Link>;
 
   return (
     <div className='App container'>
@@ -13,4 +13,4 @@ function Login() {
   )
 }
 
-export default Login
+export default Signup

@@ -1,13 +1,11 @@
-import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../app/hooks";
 import { AppDispatch } from "../../app/store";
-// import { sendLoginInfo } from "./loginAPI";
-import { LoginFormInput, LoginStatuses, selectLoginData, selectLoginStatus, sendLoginInfoAsync } from "./loginSlice";
+import { LoginFormInput, LoginStatuses, selectLoginData, selectLoginStatus, sendLoginInfoAsync } from "./authSlice";
 
 /**
- * This file renders the React components of the Login page.
+ * This file renders the React components of the sign up page.
  */
 
 function LoginForm() {

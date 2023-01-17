@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import produce from "immer";
 import { RootState } from "../../app/store";
-import { sendLoginInfo } from "./loginAPI";
+import { sendLoginInfo } from "./authAPI";
 
 /**
  * This file defines the interfaces and implements slices and reducers for logging in.

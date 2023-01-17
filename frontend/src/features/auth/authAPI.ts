@@ -1,4 +1,4 @@
-import { LoginFormInput, LoginData } from "./loginSlice";
+import { LoginFormInput, LoginData } from "./authSlice";
 
 /**
  * This file contains all API methods for logging in.
