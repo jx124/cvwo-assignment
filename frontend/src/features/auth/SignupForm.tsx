@@ -2,9 +2,10 @@ import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../app/hooks";
 import { AppDispatch } from "../../app/store";
-import { AuthStatuses, selectAuthData, selectAuthStatus, sendSignupInfoAsync, SignupFormInput } from "./authSlice";
+import { AuthStatuses, logout, selectAuthData, selectAuthStatus, sendSignupInfoAsync, SignupFormInput } from "./authSlice";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
+import { Button } from "react-bootstrap";
 
 
 /**
@@ -18,17 +19,21 @@ const signupSchema = yup.object({
 });
 
 function SignupForm() {
-    const { register, handleSubmit, formState: {errors} } = useForm<SignupFormInput>({
+    const { register, handleSubmit, formState: { errors } } = useForm<SignupFormInput>({
         resolver: yupResolver(signupSchema),
     });
 
     const loginData = useAppSelector(selectAuthData);
     const loginStatus = useAppSelector(selectAuthStatus);
     const dispatch = useDispatch<AppDispatch>();
-    
+
     const onSubmit = (data: SignupFormInput) => {
         dispatch(sendSignupInfoAsync(data));
         // console.log("Sent signup info: ", data);
+    }
+
+    const onLogout = () => {
+        dispatch(logout());
     }
 
     let contents;
@@ -36,16 +41,21 @@ function SignupForm() {
     if (loginStatus !== AuthStatuses.LoggedIn) {
         contents = <div>{loginStatus}</div>;
     } else {
-        contents = 
-            <div className='card'>
-                <p>{loginStatus}</p>
-                <div className="card-body">
-                    <h3>User ID: {loginData.user && loginData.user.id}</h3>
-                    <h3>Username: {loginData.user && loginData.user.username}</h3>
-                    <h3>User password digest: {loginData.user && loginData.user.password_digest}</h3>
-                    <h3>User token: {loginData.token}</h3>
+        contents =
+            <>
+                <div className='card'>
+                    <p>{loginStatus}</p>
+                    <div className="card-body">
+                        <h3>User ID: {loginData.user && loginData.user.id}</h3>
+                        <h3>Username: {loginData.user && loginData.user.username}</h3>
+                        <h3>User password digest: {loginData.user && loginData.user.password_digest}</h3>
+                        <h3>User token: {loginData.token}</h3>
+                    </div>
                 </div>
-            </div>
+                <div>
+                    <Button variant="outline-danger" onClick={onLogout}>Sign out</Button>
+                </div>
+            </>
     }
 
     return (<div>

@@ -5,6 +5,7 @@ import { sendLoginInfo, sendSignupInfo } from "./authAPI";
 
 /**
  * This file defines the interfaces and implements slices and reducers for logging in.
+ * TODO: Clean up console.logs, make error handling more elegant, propagate error to form
  */
 
 export enum AuthStatuses {
@@ -39,6 +40,10 @@ export interface AuthData {
 
 const loginError = JSON.stringify({
     error: "Invalid username or password",
+});
+
+const accountTakenError = JSON.stringify({
+    error: "Username already exists",
 });
 
 export interface LoginState {
@@ -78,10 +83,15 @@ export const sendSignupInfoAsync = createAsyncThunk(
     }
 )
 
-export const loginSlice = createSlice({
+export const authSlice = createSlice({
     name: "auth",
     initialState,
-    reducers: {},
+    reducers: {
+        logout: (state) => {
+            console.log("Logging out...")
+            return {...initialState};
+        }
+    },
     extraReducers: (builder) => {
         builder
             .addCase(sendLoginInfoAsync.pending, (state) => {
@@ -117,8 +127,10 @@ export const loginSlice = createSlice({
             .addCase(sendSignupInfoAsync.fulfilled, (state, action: PayloadAction<void | AuthData>) => {
                 return produce(state, (draftState) => {
                     if (action.payload && JSON.stringify(action.payload) == loginError) {
-                        draftState.data = action.payload;
-                        console.log("account not found ", draftState.data);
+                        console.log("account not found ", action.payload);
+                        draftState.status = AuthStatuses.Invalid;
+                    } else if (action.payload && JSON.stringify(action.payload) == accountTakenError) {
+                        console.log("username already exists ", action.payload);
                         draftState.status = AuthStatuses.Invalid;
                     } else if (action.payload) {
                         draftState.data = action.payload;
@@ -137,10 +149,10 @@ export const loginSlice = createSlice({
     },
 })
 
-export const {} = loginSlice.actions;
+export const { logout } = authSlice.actions;
 
 export const selectAuthData = (state: RootState) => state.auth.data;
 
 export const selectAuthStatus = (state: RootState) => state.auth.status;
 
-export default loginSlice.reducer;
+export default authSlice.reducer;
