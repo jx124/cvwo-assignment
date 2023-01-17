@@ -1,4 +1,4 @@
-import { LoginFormInput, LoginData } from "./authSlice";
+import { LoginFormInput, AuthData, SignupFormInput } from "./authSlice";
 
 /**
  * This file contains all API methods for logging in.
@@ -18,6 +18,29 @@ export async function sendLoginInfo(data: LoginFormInput) {
         .then((response) => response.json())
         .catch((error) => {
             console.log("Error: ", error);
-            return {} as LoginData;
+            return {} as AuthData;
+        })
+}
+
+export async function sendSignupInfo(data: SignupFormInput) {
+    console.log(data);
+    // Remove duplicate field confirmPassword
+    const strippedData: LoginFormInput = {
+        username: data.username,
+        password: data.password,
+    };
+    console.log("stripped data: ", strippedData);
+    
+    return fetch(`${API_URL}/signup`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(strippedData)
+    })
+        .then((response) => response.json())
+        .catch((error) => {
+            console.log("Error: ", error);
+            return {} as AuthData;
         })
 }

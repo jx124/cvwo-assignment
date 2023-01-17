@@ -2,25 +2,38 @@ import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../app/hooks";
 import { AppDispatch } from "../../app/store";
-import { LoginFormInput, LoginStatuses, selectLoginData, selectLoginStatus, sendLoginInfoAsync } from "./authSlice";
+import { AuthStatuses, selectAuthData, selectAuthStatus, sendSignupInfoAsync, SignupFormInput } from "./authSlice";
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from "yup";
+
 
 /**
- * This file renders the React components of the sign up page.
+ * This file renders the React components of the Login page.
  */
 
-function LoginForm() {
-    const { register, handleSubmit } = useForm<LoginFormInput>();
-    const loginData = useAppSelector(selectLoginData);
-    const loginStatus = useAppSelector(selectLoginStatus);
-    
+const signupSchema = yup.object({
+    username: yup.string().min(3).max(25).required(),
+    password: yup.string().min(8).required(),
+    confirmPassword: yup.string().oneOf([yup.ref("password"), null], "Passwords do not match").required(),
+});
+
+function SignupForm() {
+    const { register, handleSubmit, formState: {errors} } = useForm<SignupFormInput>({
+        resolver: yupResolver(signupSchema),
+    });
+
+    const loginData = useAppSelector(selectAuthData);
+    const loginStatus = useAppSelector(selectAuthStatus);
     const dispatch = useDispatch<AppDispatch>();
-    const onSubmit = (data: LoginFormInput) => {
-        dispatch(sendLoginInfoAsync(data));
+    
+    const onSubmit = (data: SignupFormInput) => {
+        dispatch(sendSignupInfoAsync(data));
+        // console.log("Sent signup info: ", data);
     }
 
     let contents;
 
-    if (loginStatus !== LoginStatuses.LoggedIn) {
+    if (loginStatus !== AuthStatuses.LoggedIn) {
         contents = <div>{loginStatus}</div>;
     } else {
         contents = 
@@ -36,14 +49,15 @@ function LoginForm() {
     }
 
     return (<div>
-        <h1>Login</h1>
+        <h1>Signup</h1>
         <form onSubmit={handleSubmit(onSubmit)}>
-            <input type="text" placeholder="Username" {...register("username", { required: true, maxLength: 20 })} />
-            <input type="text" placeholder="Password" {...register("password", { required: true, minLength: 8 })} />
-            <input type="submit" value="Login" />
+            <input type="text" placeholder="Username" {...register("username")} />
+            <input type="text" placeholder="Password" {...register("password")} />
+            <input type="text" placeholder="Confirm Password" {...register("confirmPassword")} />
+            <input type="submit" value="Register" />
         </form>
         {contents}
     </div>);
 }
 
-export default LoginForm
+export default SignupForm

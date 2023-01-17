@@ -1,17 +1,17 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import produce from "immer";
 import { RootState } from "../../app/store";
-import { sendLoginInfo } from "./authAPI";
+import { sendLoginInfo, sendSignupInfo } from "./authAPI";
 
 /**
  * This file defines the interfaces and implements slices and reducers for logging in.
  */
 
-export enum LoginStatuses {
+export enum AuthStatuses {
     Initial = "Not Logged in",
     Loading = "Logging in...",
     LoggedIn = "User logged in",
-    Deleted = "User not found",
+    Invalid = "Invalid username or password",
     Error = "Error",
 }
 
@@ -20,7 +20,13 @@ export interface LoginFormInput {
     password: string;
 }
 
-export interface LoginData {
+export interface SignupFormInput {
+    username: string;
+    password: string;
+    confirmPassword: string;
+}
+
+export interface AuthData {
     user?: {
         id?: number;
         username?: string;
@@ -31,9 +37,13 @@ export interface LoginData {
     token?: string;
 }
 
+const loginError = JSON.stringify({
+    error: "Invalid username or password",
+});
+
 export interface LoginState {
-    data: LoginData;
-    status: LoginStatuses;
+    data: AuthData;
+    status: AuthStatuses;
 }
 
 const initialState: LoginState = {
@@ -47,35 +57,48 @@ const initialState: LoginState = {
             },
             token: "",
     },
-    status: LoginStatuses.Initial,
+    status: AuthStatuses.Initial,
 }
 
 export const sendLoginInfoAsync = createAsyncThunk(
-    "login/sendLoginInfo",
+    "auth/sendLoginInfo",
     async (data: LoginFormInput) => {
         const response = await sendLoginInfo(data);
-        console.log("received data in thunk: ", response);
+        console.log("auth/sendLoginInfo: received data in thunk: ", response);
+        return response;
+    }
+)
+
+export const sendSignupInfoAsync = createAsyncThunk(
+    "auth/sendSignupInfo",
+    async (data: SignupFormInput) => {
+        const response = await sendSignupInfo(data);
+        console.log("auth/sendSignupInfo: received data in thunk: ", response);
         return response;
     }
 )
 
 export const loginSlice = createSlice({
-    name: "login",
+    name: "auth",
     initialState,
     reducers: {},
     extraReducers: (builder) => {
         builder
             .addCase(sendLoginInfoAsync.pending, (state) => {
                 return produce(state, (draftState) => {
-                    draftState.status = LoginStatuses.Loading;
+                    draftState.status = AuthStatuses.Loading;
                 })
             })
-            .addCase(sendLoginInfoAsync.fulfilled, (state, action: PayloadAction<void | LoginData>) => {
+            .addCase(sendLoginInfoAsync.fulfilled, (state, action: PayloadAction<void | AuthData>) => {
                 return produce(state, (draftState) => {
-                    if (action.payload) {
+                    if (action.payload && JSON.stringify(action.payload) == loginError) {
+                        draftState.data = action.payload;
+                        console.log("account not found ", draftState.data);
+                        draftState.status = AuthStatuses.Invalid;
+                    } else if (action.payload) {
                         draftState.data = action.payload;
                         console.log("set draftState.data to: ", draftState.data);
-                        draftState.status = LoginStatuses.LoggedIn;
+                        draftState.status = AuthStatuses.LoggedIn;
                     } else {
                         console.log("hit else block in reducer");
                     }
@@ -83,7 +106,32 @@ export const loginSlice = createSlice({
             })
             .addCase(sendLoginInfoAsync.rejected, (state) => {
                 return produce(state, (draftState) => {
-                    draftState.status = LoginStatuses.Error;
+                    draftState.status = AuthStatuses.Error;
+                })
+            })
+            .addCase(sendSignupInfoAsync.pending, (state) => {
+                return produce(state, (draftState) => {
+                    draftState.status = AuthStatuses.Loading;
+                })
+            })
+            .addCase(sendSignupInfoAsync.fulfilled, (state, action: PayloadAction<void | AuthData>) => {
+                return produce(state, (draftState) => {
+                    if (action.payload && JSON.stringify(action.payload) == loginError) {
+                        draftState.data = action.payload;
+                        console.log("account not found ", draftState.data);
+                        draftState.status = AuthStatuses.Invalid;
+                    } else if (action.payload) {
+                        draftState.data = action.payload;
+                        console.log("set draftState.data to: ", draftState.data);
+                        draftState.status = AuthStatuses.LoggedIn;
+                    } else {
+                        console.log("hit else block in reducer");
+                    }
+                })
+            })
+            .addCase(sendSignupInfoAsync.rejected, (state) => {
+                return produce(state, (draftState) => {
+                    draftState.status = AuthStatuses.Error;
                 })
             })
     },
@@ -91,8 +139,8 @@ export const loginSlice = createSlice({
 
 export const {} = loginSlice.actions;
 
-export const selectLoginData = (state: RootState) => state.login.data;
+export const selectAuthData = (state: RootState) => state.auth.data;
 
-export const selectLoginStatus = (state: RootState) => state.login.status;
+export const selectAuthStatus = (state: RootState) => state.auth.status;
 
 export default loginSlice.reducer;

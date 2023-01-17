@@ -1,13 +1,13 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import LoginForm from '../features/auth/LoginForm'
+import SignupForm from '../features/auth/SignupForm';
 
 function Signup() {
   const hyperlink = <Link to="/login">log in</Link>;
 
   return (
     <div className='App container'>
-        <LoginForm />
+        <SignupForm />
         <p>Click here to {hyperlink}.</p>
     </div>
   )

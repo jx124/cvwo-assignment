@@ -2,25 +2,36 @@ import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../app/hooks";
 import { AppDispatch } from "../../app/store";
-import { LoginFormInput, LoginStatuses, selectLoginData, selectLoginStatus, sendLoginInfoAsync } from "./authSlice";
+import { LoginFormInput, AuthStatuses, selectAuthData, selectAuthStatus, sendLoginInfoAsync } from "./authSlice";
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from "yup";
+
 
 /**
  * This file renders the React components of the Login page.
  */
 
+const loginSchema = yup.object({
+    username: yup.string().required(),
+    password: yup.string().required(),
+});
+
 function LoginForm() {
-    const { register, handleSubmit } = useForm<LoginFormInput>();
-    const loginData = useAppSelector(selectLoginData);
-    const loginStatus = useAppSelector(selectLoginStatus);
-    
+    const { register, handleSubmit, formState: {errors} } = useForm<LoginFormInput>({
+        resolver: yupResolver(loginSchema),
+    });
+
+    const loginData = useAppSelector(selectAuthData);
+    const loginStatus = useAppSelector(selectAuthStatus);
     const dispatch = useDispatch<AppDispatch>();
+    
     const onSubmit = (data: LoginFormInput) => {
         dispatch(sendLoginInfoAsync(data));
     }
 
     let contents;
 
-    if (loginStatus !== LoginStatuses.LoggedIn) {
+    if (loginStatus !== AuthStatuses.LoggedIn) {
         contents = <div>{loginStatus}</div>;
     } else {
         contents = 
@@ -38,8 +49,8 @@ function LoginForm() {
     return (<div>
         <h1>Login</h1>
         <form onSubmit={handleSubmit(onSubmit)}>
-            <input type="text" placeholder="Username" {...register("username", { required: true, maxLength: 20 })} />
-            <input type="text" placeholder="Password" {...register("password", { required: true, minLength: 8 })} />
+            <input type="text" placeholder="Username" {...register("username")} />
+            <input type="text" placeholder="Password" {...register("password")} />
             <input type="submit" value="Login" />
         </form>
         {contents}
