@@ -3,7 +3,7 @@ import produce from "immer";
 import { RootState } from "../../app/store";
 import { fetchPosts } from "./postAPI";
 
-export enum Statuses {
+export enum PostStatuses {
     Initial = "Not Fetched",
     Loading = "Loading...",
     UpToDate = "Up To Date",
@@ -41,7 +41,7 @@ const initialState: PostsState = {
         }
     ],
 
-    status: Statuses.Initial
+    status: PostStatuses.Initial
 }
 
 export const fetchPostAsync = createAsyncThunk(
@@ -66,18 +66,18 @@ export const postSlice = createSlice({
             .addCase(fetchPostAsync.pending, (state) => {
                 return produce(state, (draftState) => {
                     // draftState is a copy of the actual state which will be applied appropriately
-                    draftState.status = Statuses.Loading;
+                    draftState.status = PostStatuses.Loading;
                 })
             })
             .addCase(fetchPostAsync.fulfilled, (state, action) => {
                 return produce(state, (draftState) => {
                     draftState.posts = action.payload;
-                    draftState.status = Statuses.UpToDate;
+                    draftState.status = PostStatuses.UpToDate;
                 })
             })
             .addCase(fetchPostAsync.rejected, (state) => {
                 return produce(state, (draftState) => {
-                    draftState.status = Statuses.Error;
+                    draftState.status = PostStatuses.Error;
                 })
             })
     }
@@ -87,6 +87,6 @@ export const {} = postSlice.actions;
 
 export const selectPosts = (state: RootState) => state.posts.posts; 
 
-export const selectStatus = (state: RootState) => state.posts.status;
+export const selectPostStatus = (state: RootState) => state.posts.status;
 
 export default postSlice.reducer;

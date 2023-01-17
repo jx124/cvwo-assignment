@@ -2,12 +2,12 @@ import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../app/hooks'
 import { AppDispatch } from '../../app/store';
-import { fetchPostAsync, PostState, selectPosts, selectStatus, Statuses } from './postSlice';
+import { fetchPostAsync, PostState, selectPosts, selectPostStatus, PostStatuses } from './postSlice';
 
 // Iterates through all posts and renders Post.tsx components
 function Posts() {
   const posts = useAppSelector(selectPosts);
-  const status = useAppSelector(selectStatus);
+  const status = useAppSelector(selectPostStatus);
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
@@ -16,7 +16,7 @@ function Posts() {
 
   let contents;
 
-  if (status !== Statuses.UpToDate) {
+  if (status !== PostStatuses.UpToDate) {
     contents = <div>{status}</div>
   } else {
     contents = <div className='card'>
