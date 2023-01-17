@@ -1,13 +1,20 @@
 import React from 'react';
-import Posts from './features/posts/Posts';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
-import LoginForm from './features/login/LoginForm';
+import NavigationBar from './features/navbar/NavigationBar';
+import Home from './pages/Home';
+import Login from './pages/Login';
 
 function App() {
   return (
     <div className="App container">
-      <LoginForm />
-      <Posts />
+      <Router>
+        <NavigationBar />
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/login' element={<Login />} />
+        </Routes>
+      </Router>
     </div>
   );
 }
