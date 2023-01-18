@@ -14,7 +14,7 @@ function Posts() {
     dispatch(fetchPostAsync());
   }, [dispatch]);
 
-  let contents;
+  let contents = null;
 
   if (status !== PostStatuses.UpToDate) {
     contents = <div>{status}</div>

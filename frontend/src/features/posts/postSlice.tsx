@@ -24,7 +24,7 @@ export interface PostState {
 
 export interface PostsState {
     posts: PostState[];
-    status: string;
+    status: PostStatuses;
 }
 
 const initialState: PostsState = {

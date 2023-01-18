@@ -1,7 +1,7 @@
 class PostsController < ApplicationController
-  before_action :set_post, only: %i[ show edit update destroy ]
+  before_action :set_post, only: %i[ edit update destroy ]
   skip_before_action :verify_authenticity_token
-  skip_before_action :authorized, only: %i[ index ]
+  skip_before_action :authorized, only: %i[ index show ]
 
   # GET /posts or /posts.json
   def index
@@ -10,6 +10,21 @@ class PostsController < ApplicationController
 
   # GET /posts/1 or /posts/1.json
   def show
+    parsed_query = Rack::Utils.parse_nested_query params[:id]
+    has_post_id = parsed_query.include?("post_id")    
+    has_user_id = parsed_query.include?("user_id")    
+
+    if has_post_id and has_user_id
+      @posts = Post.where("id = ? AND user_id = ?", parsed_query["post_id"], parsed_query["user_id"])
+    elsif has_post_id
+      @posts = Post.where("id = ?", parsed_query["post_id"])
+    elsif has_user_id
+      @posts = Post.where("user_id = ?", parsed_query["user_id"])
+    else
+      render json: {error: "Invalid query"}
+    end
+      
+    render json: @posts
   end
 
   # GET /posts/new
