@@ -44,6 +44,14 @@ const initialState: PostsState = {
     status: PostStatuses.Initial
 }
 
+export interface PostFormInput {
+    title: string;
+    body: string;
+    tags: {
+        item: string;
+    }[]
+}
+
 export const fetchPostAsync = createAsyncThunk(
     "posts/fetchPosts",
     async () => {
