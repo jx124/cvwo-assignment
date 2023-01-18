@@ -29,14 +29,13 @@ function SignupForm() {
 
     const onSubmit = (data: SignupFormInput) => {
         dispatch(sendSignupInfoAsync(data));
-        // console.log("Sent signup info: ", data);
     }
 
     const onLogout = () => {
         dispatch(logout());
     }
 
-    let contents;
+    let contents = null;
 
     if (loginStatus !== AuthStatuses.LoggedIn) {
         contents = <div>{loginStatus}</div>;
@@ -62,8 +61,12 @@ function SignupForm() {
         <h1>Signup</h1>
         <form onSubmit={handleSubmit(onSubmit)}>
             <input type="text" placeholder="Username" {...register("username")} />
+            <p>{errors.username?.message}</p>
+            <p>{loginStatus == AuthStatuses.DuplicateUsername && AuthStatuses.DuplicateUsername}</p>
             <input type="text" placeholder="Password" {...register("password")} />
+            <p>{errors.password?.message}</p>
             <input type="text" placeholder="Confirm Password" {...register("confirmPassword")} />
+            <p>{errors.confirmPassword?.message}</p>
             <input type="submit" value="Register" />
         </form>
         {contents}

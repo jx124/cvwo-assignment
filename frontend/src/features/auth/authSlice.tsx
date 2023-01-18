@@ -13,6 +13,7 @@ export enum AuthStatuses {
     Loading = "Logging in...",
     LoggedIn = "User logged in",
     Invalid = "Invalid username or password",
+    DuplicateUsername = "Username already exists",
     Error = "Error",
 }
 
@@ -88,7 +89,6 @@ export const authSlice = createSlice({
     initialState,
     reducers: {
         logout: (state) => {
-            console.log("Logging out...")
             return {...initialState};
         }
     },
@@ -101,16 +101,14 @@ export const authSlice = createSlice({
             })
             .addCase(sendLoginInfoAsync.fulfilled, (state, action: PayloadAction<void | AuthData>) => {
                 return produce(state, (draftState) => {
-                    if (action.payload && JSON.stringify(action.payload) == loginError) {
+                    if (action.payload && JSON.stringify(action.payload) === loginError) {
                         draftState.data = action.payload;
-                        console.log("account not found ", draftState.data);
                         draftState.status = AuthStatuses.Invalid;
                     } else if (action.payload) {
                         draftState.data = action.payload;
-                        console.log("set draftState.data to: ", draftState.data);
                         draftState.status = AuthStatuses.LoggedIn;
                     } else {
-                        console.log("hit else block in reducer");
+                        console.error("Hit else block in reducer");
                     }
                 })
             })
@@ -126,18 +124,15 @@ export const authSlice = createSlice({
             })
             .addCase(sendSignupInfoAsync.fulfilled, (state, action: PayloadAction<void | AuthData>) => {
                 return produce(state, (draftState) => {
-                    if (action.payload && JSON.stringify(action.payload) == loginError) {
-                        console.log("account not found ", action.payload);
+                    if (action.payload && JSON.stringify(action.payload) === loginError) {
                         draftState.status = AuthStatuses.Invalid;
-                    } else if (action.payload && JSON.stringify(action.payload) == accountTakenError) {
-                        console.log("username already exists ", action.payload);
-                        draftState.status = AuthStatuses.Invalid;
+                    } else if (action.payload && JSON.stringify(action.payload) === accountTakenError) {
+                        draftState.status = AuthStatuses.DuplicateUsername;
                     } else if (action.payload) {
                         draftState.data = action.payload;
-                        console.log("set draftState.data to: ", draftState.data);
                         draftState.status = AuthStatuses.LoggedIn;
                     } else {
-                        console.log("hit else block in reducer");
+                        console.error("Hit else block in reducer");
                     }
                 })
             })
