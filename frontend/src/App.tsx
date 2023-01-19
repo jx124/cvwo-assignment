@@ -6,7 +6,7 @@ import PostForm from './features/posts/PostForm';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Logout from './pages/Logout';
-import Post from './pages/Post';
+import Thread from './pages/Thread';
 import Signup from './pages/Signup';
 
 function App() {
@@ -19,7 +19,7 @@ function App() {
           <Route path='/login' element={<Login />} />
           <Route path='/signup' element={<Signup />} />
           <Route path='/logout' element={<Logout />} />
-          <Route path='/posts' element={<Post />} />
+          <Route path='/posts/' element={<Thread />} />
           <Route path='/posts/new' element={<PostForm />} />
         </Routes>
       </Router>
