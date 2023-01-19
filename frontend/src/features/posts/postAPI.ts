@@ -1,10 +1,25 @@
 import { AuthData } from "../auth/authSlice";
-import { CreatePostRequest, DeletePostRequest, PostFormInput, PostsState } from "./postSlice";
+import { CreatePostRequest, DeletePostRequest, PostsState } from "./postSlice";
 
 const API_URL = "http://localhost:3000";
 
 export async function fetchPosts() {
     return fetch(`${API_URL}/posts.json`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            // Add auth token here
+        },
+    })
+        .then((response) => response.json())
+        .catch((error) => {
+            console.log("Error: ", error);
+            return {} as PostsState;
+        });
+}
+
+export async function fetchSpecificPosts(queryString: string) {
+    return fetch(`${API_URL}/posts/${queryString}.json`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",

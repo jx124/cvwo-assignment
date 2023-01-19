@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import produce from "immer";
 import { RootState } from "../../app/store";
-import { createPost, fetchPosts, destroyPost } from "./postAPI";
+import { createPost, fetchPosts, destroyPost, fetchSpecificPosts } from "./postAPI";
 
 export enum PostStatuses {
     Initial = "Not Fetched",
@@ -76,10 +76,18 @@ export interface UpdatePostRequest {
 }
 
 
-export const fetchPostAsync = createAsyncThunk(
+export const fetchPostsAsync = createAsyncThunk(
     "posts/fetchPosts",
     async () => {
         const response = await fetchPosts();
+        return response;
+    }
+)
+
+export const fetchSpecificPostsAsync = createAsyncThunk(
+    "posts/fetchSpecificPosts",
+    async (queryString: string) => {
+        const response = await fetchSpecificPosts(queryString);
         return response;
     }
 )
@@ -114,19 +122,35 @@ export const postSlice = createSlice({
     extraReducers: (builder) => {
         builder
             /* Fetch section */
-            .addCase(fetchPostAsync.pending, (state) => {
+            .addCase(fetchPostsAsync.pending, (state) => {
                 return produce(state, (draftState) => {
                     // draftState is a copy of the actual state which will be applied appropriately
                     draftState.status = PostStatuses.Loading;
                 })
             })
-            .addCase(fetchPostAsync.fulfilled, (state, action) => {
+            .addCase(fetchPostsAsync.fulfilled, (state, action) => {
                 return produce(state, (draftState) => {
                     draftState.posts = action.payload;
                     draftState.status = PostStatuses.UpToDate;
                 })
             })
-            .addCase(fetchPostAsync.rejected, (state) => {
+            .addCase(fetchPostsAsync.rejected, (state) => {
+                return produce(state, (draftState) => {
+                    draftState.status = PostStatuses.Error;
+                })
+            })
+            .addCase(fetchSpecificPostsAsync.pending, (state) => {
+                return produce(state, (draftState) => {
+                    draftState.status = PostStatuses.Loading;
+                })
+            })
+            .addCase(fetchSpecificPostsAsync.fulfilled, (state, action) => {
+                return produce(state, (draftState) => {
+                    draftState.posts = action.payload;
+                    draftState.status = PostStatuses.UpToDate;
+                })
+            })
+            .addCase(fetchSpecificPostsAsync.rejected, (state) => {
                 return produce(state, (draftState) => {
                     draftState.status = PostStatuses.Error;
                 })
