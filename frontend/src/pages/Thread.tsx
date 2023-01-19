@@ -24,7 +24,7 @@ function Thread() {
         <div className='App container'>
             <h3>Post ID: {postId}</h3>
             <h3>User ID: {userId}</h3>
-            <Post dispatch={dispatch} post={posts[0]}/>
+            <Post dispatch={dispatch} post={posts[0]} clickable={false}/>
             <Comments />
         </div>
     )

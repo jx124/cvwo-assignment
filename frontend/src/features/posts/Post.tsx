@@ -4,6 +4,7 @@ import ButtonGroup from "./ButtonGroup";
 
 function Post(props: any) { // TODO: fix any type
     const post = props.post;
+    const clickable = props.clickable;
     const [shadow, setShadow] = useState("");
     const navigate = useNavigate();
     const linkTo = (link: string) => {
@@ -14,9 +15,9 @@ function Post(props: any) { // TODO: fix any type
         <div className={shadow + "card text-start px-3 py-2"}
             key={post.id}
             style={{ margin: "5em", transition: "0.1s"}}
-            onMouseEnter={() => setShadow("shadow ")}
-            onMouseLeave={() => setShadow("")}
-            onClick={() => linkTo(`/posts/?post_id=${post.id}`)}>
+            onMouseEnter={() => {clickable && setShadow("shadow ")}}
+            onMouseLeave={() => {clickable && setShadow("")}}
+            onClick={() => {clickable && linkTo(`/posts/?post_id=${post.id}`)}}>
 
             <h3>{post.title}</h3>
             <div className='row mb-2'>
