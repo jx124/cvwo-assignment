@@ -3,4 +3,7 @@ class User < ApplicationRecord
 
     validates :username, presence: true, uniqueness: true
     validates :password, presence: true
+
+    has_many :post, dependent: :destroy
+    has_many :comment, dependent: :destroy
 end
