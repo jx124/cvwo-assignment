@@ -1,4 +1,5 @@
 import React from 'react'
+import ButtonGroup from "./ButtonGroup";
 
 function Post(props: any) { // TODO: fix any type
   const post = props.post;
@@ -11,6 +12,10 @@ function Post(props: any) { // TODO: fix any type
       </div>
       <h3>Rating: {post.rating}</h3>
       <h3>Created by: {post.user_id}</h3>
+      <ButtonGroup
+        post_id={props.post.id}
+        dispatch={props.dispatch}
+      />
     </div>
   )
 }

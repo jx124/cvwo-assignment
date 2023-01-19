@@ -1,5 +1,5 @@
 import { AuthData } from "../auth/authSlice";
-import { CreatePostRequest, PostFormInput, PostsState } from "./postSlice";
+import { CreatePostRequest, DeletePostRequest, PostFormInput, PostsState } from "./postSlice";
 
 const API_URL = "http://localhost:3000";
 
@@ -21,6 +21,23 @@ export async function fetchPosts() {
 export async function createPost(request: CreatePostRequest) {
     return fetch(`${API_URL}/posts.json`, {
         method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${request.token}`
+        },
+        body: JSON.stringify(request.post),
+    })
+        .then((response) => response.json())
+        .catch((error) => {
+            console.log("Error: ", error);
+            return {} as PostsState;
+        });
+}
+
+export async function destroyPost(request: DeletePostRequest) {
+    console.log("request: ", request);
+    return fetch(`${API_URL}/posts/${request.post.post_id}.json`, {
+        method: "DELETE",
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${request.token}`

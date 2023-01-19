@@ -67,11 +67,15 @@ class PostsController < ApplicationController
 
   # DELETE /posts/1 or /posts/1.json
   def destroy
-    @post.destroy
-
     respond_to do |format|
-      format.html { redirect_to posts_url, notice: "Post was successfully destroyed." }
-      format.json { head :no_content }
+      if @user.id == @post.user_id
+        @post.destroy
+        format.html { redirect_to posts_url, notice: "Post was successfully destroyed." }
+        format.json { render json: Post.all, status: :ok }
+      else
+        format.html { redirect_to posts_url, notice: "User does not have permission to delete post." }
+        format.json { render json: Post.all, status: :unauthorized}
+      end
     end
   end
 
