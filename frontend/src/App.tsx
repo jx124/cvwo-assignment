@@ -5,6 +5,7 @@ import NavigationBar from './features/navbar/NavigationBar';
 import PostForm from './features/posts/PostForm';
 import Home from './pages/Home';
 import Login from './pages/Login';
+import Logout from './pages/Logout';
 import Post from './pages/Post';
 import Signup from './pages/Signup';
 
@@ -17,6 +18,7 @@ function App() {
           <Route path='/' element={<Home />} />
           <Route path='/login' element={<Login />} />
           <Route path='/signup' element={<Signup />} />
+          <Route path='/logout' element={<Logout />} />
           <Route path='/posts' element={<Post />} />
           <Route path='/posts/new' element={<PostForm />} />
         </Routes>
