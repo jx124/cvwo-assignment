@@ -19,7 +19,7 @@ function Logout() {
     }
 
     async function redirectHome() {
-        await wait(2000);
+        await wait(1000);
         navigate("/");
     }
 
