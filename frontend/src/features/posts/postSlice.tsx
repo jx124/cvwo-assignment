@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import produce from "immer";
 import { RootState } from "../../app/store";
-import { fetchPosts } from "./postAPI";
+import { createPost, fetchPosts } from "./postAPI";
 
 export enum PostStatuses {
     Initial = "Not Fetched",
@@ -52,10 +52,29 @@ export interface PostFormInput {
     }[]
 }
 
+export interface CreatePostRequest {
+    post: {
+        title: string;
+        body: string;
+        tags: string[];
+        rating: number;
+        user_id: number;
+    },
+    token: string;
+}
+
 export const fetchPostAsync = createAsyncThunk(
     "posts/fetchPosts",
     async () => {
         const response = await fetchPosts();
+        return response;
+    }
+)
+
+export const createPostAsync = createAsyncThunk(
+    "posts/createPost",
+    async (request: CreatePostRequest) => {
+        const response = await createPost(request);
         return response;
     }
 )
@@ -88,12 +107,29 @@ export const postSlice = createSlice({
                     draftState.status = PostStatuses.Error;
                 })
             })
+            /* Create section */
+            .addCase(createPostAsync.pending, (state) => {
+                return produce(state, (draftState) => {
+                    draftState.status = PostStatuses.Loading;
+                })
+            })
+            .addCase(createPostAsync.fulfilled, (state, action) => {
+                return produce(state, (draftState) => {
+                    draftState.posts.push(action.payload);
+                    draftState.status = PostStatuses.UpToDate;
+                })
+            })
+            .addCase(createPostAsync.rejected, (state) => {
+                return produce(state, (draftState) => {
+                    draftState.status = PostStatuses.Error;
+                })
+            })
     }
 })
 
-export const {} = postSlice.actions;
+export const { } = postSlice.actions;
 
-export const selectPosts = (state: RootState) => state.posts.posts; 
+export const selectPosts = (state: RootState) => state.posts.posts;
 
 export const selectPostStatus = (state: RootState) => state.posts.status;
 

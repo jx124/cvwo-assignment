@@ -4,7 +4,10 @@ import { AppDispatch } from '../../app/store';
 import { useFieldArray, useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
-import { PostFormInput } from './postSlice';
+import { createPostAsync, CreatePostRequest, PostFormInput } from './postSlice';
+import { useAppSelector } from '../../app/hooks';
+import { selectAuthData } from '../auth/authSlice';
+import { useNavigate } from 'react-router-dom';
 
 const tagSchema = yup.object({
   item: yup.string().min(1).max(30).required(),
@@ -17,12 +20,11 @@ const postSchema = yup.object({
 })
 
 function PostForm() {
-  // const dispatch = useDispatch<AppDispatch>();
-  // const [title, setTitle] = useState("");
-  // const [body, setBody] = useState("");
-  // const [tags, setTags] = useState({});
+  const dispatch = useDispatch<AppDispatch>();
+  const authData = useAppSelector(selectAuthData);
+  const navigate = useNavigate();
 
-  const { register, control, handleSubmit, reset, formState: {errors} } = useForm<PostFormInput>({
+  const { register, control, handleSubmit, reset, formState: { errors } } = useForm<PostFormInput>({
     resolver: yupResolver(postSchema),
     defaultValues: {
       title: "Post title",
@@ -40,10 +42,50 @@ function PostForm() {
     control
   });
 
-  function onSubmit(data: PostFormInput) {
-    console.log(data);
+  async function onSubmit(data: PostFormInput) {
+    console.log("data: ", data);
+    console.log("token: ", authData.token);
+    /* Convert from
+
+        tags: {
+            item: string;
+        }[]
+
+    object array in PostFormInput to 
+
+        tags: string[]
+    
+    string array to match backend api
+    */
+    let newTagsArray: string[] = [];
+
+    for (let index in data.tags) {
+      newTagsArray.push(data.tags[index].item);
+    }
+
+    const createPostRequestData: CreatePostRequest = {
+      post: {
+        title: data.title,
+        body: data.body,
+        tags: newTagsArray,
+        rating: 0,
+        user_id: authData.user?.id ? authData.user?.id : 0,
+      },
+      token: authData.token ? authData.token : "",
+    }
+    console.log("request: ", createPostRequestData);
+
+    await dispatch(createPostAsync(createPostRequestData))
+      .then((response) => {
+        console.log("response: ", response);
+        // redirect to previous page if login successful
+        if (!("error" in response.payload)) {
+          navigate(-1);
+      }
+      return response;
+      })
   }
-  
+
   return (
     <div className='App container'>
       <h1>Create Post</h1>
