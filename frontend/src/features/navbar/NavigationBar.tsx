@@ -1,11 +1,13 @@
 import { Nav, Navbar } from 'react-bootstrap';
 import { Link, useLocation } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks';
-import { AuthStatuses, selectAuthStatus } from '../auth/authSlice';
+import { AuthStatuses, selectAuthData, selectAuthStatus } from '../auth/authSlice';
 
 function NavigationBar() {
     const authStatus = useAppSelector(selectAuthStatus);
+    const authData = useAppSelector(selectAuthData);
     let loginLogoutLink = null;
+    let profileLink = null;
     let location = useLocation();
 
     if (authStatus !== AuthStatuses.LoggedIn) {
@@ -16,19 +18,28 @@ function NavigationBar() {
         loginLogoutLink =
             <Link className={"nav-link" + (location.pathname === "/logout" ? " active" : "")}
                 to="/logout">Logout</Link>;
+        profileLink =
+            <Link className={"nav-link" + (location.pathname === "/profile" ? " active" : "")}
+                to="/profile">Profile</Link>
     }
 
     return (
         <Navbar expand="lg" bg="dark" variant="dark" fixed='top'>
             <Navbar.Toggle aria-controls='navbarScroll' data-bs-target='#navbarScroll' />
             <Navbar.Collapse id='navbarScroll'>
-                <Nav style={{ marginLeft: "10px" }}>
+                <Nav className='ms-3'>
                     <Link className={"nav-link" + (location.pathname === "/" ? " active" : "")}
                         to="/">Home</Link>
                     {loginLogoutLink}
                     <Link className={"nav-link" + (location.pathname === "/posts/new" ? " active" : "")}
                         to="/posts/new">Create Post</Link>
+                    {profileLink}
                 </Nav>
+                <div className='nav-link active ms-auto me-4'>
+                    <div className='text-light justify-content-center'>
+                        {authData && "Welcome back, " + authData.user?.username}.
+                    </div>
+                </div>
             </Navbar.Collapse>
         </Navbar>
     )
