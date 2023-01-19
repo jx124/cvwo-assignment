@@ -2,10 +2,10 @@ import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../app/hooks";
 import { AppDispatch } from "../../app/store";
-import { AuthStatuses, logout, selectAuthData, selectAuthStatus, sendSignupInfoAsync, SignupFormInput } from "./authSlice";
+import { AuthStatuses, selectAuthStatus, sendSignupInfoAsync, SignupFormInput } from "./authSlice";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
-import { Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 
 /**
@@ -13,9 +13,19 @@ import { Button } from "react-bootstrap";
  */
 
 const signupSchema = yup.object({
-    username: yup.string().min(3).max(25).required(),
-    password: yup.string().min(8).required(),
-    confirmPassword: yup.string().oneOf([yup.ref("password"), null], "Passwords do not match").required(),
+    username: 
+        yup.string()
+            .min(3, "Username must be at least 3 characters")
+            .max(25, "Username cannot exceed 25 characters")
+            .required(),
+    password: 
+        yup.string()
+            .min(8, "Password must be at least 8 characters")
+            .required(),
+    confirmPassword: 
+        yup.string()
+            .oneOf([yup.ref("password"), null], "Passwords do not match")
+            .required(),
 });
 
 function SignupForm() {
@@ -23,7 +33,6 @@ function SignupForm() {
         resolver: yupResolver(signupSchema),
     });
 
-    const loginData = useAppSelector(selectAuthData);
     const loginStatus = useAppSelector(selectAuthStatus);
     const dispatch = useDispatch<AppDispatch>();
 
@@ -31,45 +40,65 @@ function SignupForm() {
         dispatch(sendSignupInfoAsync(data));
     }
 
-    const onLogout = () => {
-        dispatch(logout());
-    }
-
-    let contents = null;
-
-    if (loginStatus !== AuthStatuses.LoggedIn) {
-        contents = <div>{loginStatus}</div>;
-    } else {
-        contents =
-            <>
-                <div className='card'>
-                    <p>{loginStatus}</p>
-                    <div className="card-body">
-                        <h3>User ID: {loginData.user && loginData.user.id}</h3>
-                        <h3>Username: {loginData.user && loginData.user.username}</h3>
-                        <h3>User password digest: {loginData.user && loginData.user.password_digest}</h3>
-                        <h3>User token: {loginData.token}</h3>
-                    </div>
-                </div>
-                <div>
-                    <Button variant="outline-danger" onClick={onLogout}>Sign out</Button>
-                </div>
-            </>
-    }
+    const loginLink = <Link to="/login">Login</Link>;
 
     return (<div>
-        <h1>Signup</h1>
         <form onSubmit={handleSubmit(onSubmit)}>
-            <input type="text" placeholder="Username" {...register("username")} />
-            <p>{errors.username?.message}</p>
-            <p>{loginStatus == AuthStatuses.DuplicateUsername && AuthStatuses.DuplicateUsername}</p>
-            <input type="text" placeholder="Password" {...register("password")} />
-            <p>{errors.password?.message}</p>
-            <input type="text" placeholder="Confirm Password" {...register("confirmPassword")} />
-            <p>{errors.confirmPassword?.message}</p>
-            <input type="submit" value="Register" />
+            <div className="flex-container"
+                style={{
+                    display: "flex",
+                    justifyContent: "space-around",
+                }}>
+                <div className="card" style={{ margin: "200px", width: "500px" }}>
+                    <div className="card-body text-start">
+                        <h1>Sign up</h1>
+                        <div>
+                            <label htmlFor="formUsername" className="form-label">Username</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                id="formUsername"
+                                {...register("username")} />
+                            <div className="form-text text-danger" style={{ height: "21px" }}>
+                                {errors.username?.message
+                                    || (loginStatus == AuthStatuses.DuplicateUsername && AuthStatuses.DuplicateUsername)}
+                            </div>
+                        </div>
+                        <div>
+                            <label htmlFor="formPassword" className="form-label">Password</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                id="formPassword"
+                                {...register("password")} />
+                            <div className="form-text text-danger" style={{ height: "21px" }}>
+                                {errors.password?.message}
+                            </div>
+                        </div>
+                        <div className="mb-1">
+                            <label htmlFor="formConfirmPassword" className="form-label">Password</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                id="formConfirmPassword"
+                                {...register("confirmPassword")} />
+                            <div className="form-text text-danger" style={{ height: "21px" }}>
+                                {errors.confirmPassword?.message}
+                            </div>
+                        </div>
+                        <div className="mb-3">
+                            <input
+                                type="submit"
+                                className="btn btn-primary btn-lg form-control"
+                                value="Register" />
+                        </div>
+                        <div className="mt-4 d-flex justify-content-center">
+                            <p>Already have an account? {loginLink} now.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </form>
-        {contents}
     </div>);
 }
 
