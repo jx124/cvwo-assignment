@@ -5,7 +5,7 @@ import { AppDispatch } from "../../app/store";
 import { AuthStatuses, selectAuthStatus, sendSignupInfoAsync, SignupFormInput } from "./authSlice";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 
 /**
@@ -35,9 +35,17 @@ function SignupForm() {
 
     const loginStatus = useAppSelector(selectAuthStatus);
     const dispatch = useDispatch<AppDispatch>();
+    const navigate = useNavigate();
 
-    const onSubmit = (data: SignupFormInput) => {
-        dispatch(sendSignupInfoAsync(data));
+    const onSubmit = async (data: SignupFormInput) => {
+        await dispatch(sendSignupInfoAsync(data))
+            .then((response) => {
+                // redirect to previous page if login successful
+                if (!("error" in response.payload)) {
+                    navigate(-1);
+                }
+                return response;
+            });
     }
 
     const loginLink = <Link to="/login">Login</Link>;
@@ -67,7 +75,7 @@ function SignupForm() {
                         <div>
                             <label htmlFor="formPassword" className="form-label">Password</label>
                             <input
-                                type="text"
+                                type="password"
                                 className="form-control"
                                 id="formPassword"
                                 {...register("password")} />
@@ -78,7 +86,7 @@ function SignupForm() {
                         <div className="mb-1">
                             <label htmlFor="formConfirmPassword" className="form-label">Password</label>
                             <input
-                                type="text"
+                                type="password"
                                 className="form-control"
                                 id="formConfirmPassword"
                                 {...register("confirmPassword")} />

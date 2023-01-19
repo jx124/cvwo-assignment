@@ -64,7 +64,7 @@ function LoginForm() {
                         <div className="mb-1">
                             <label htmlFor="formPassword" className="form-label">Password</label>
                             <input
-                                type="text"
+                                type="password"
                                 className="form-control"
                                 id="formPassword"
                                 {...register("password")} />

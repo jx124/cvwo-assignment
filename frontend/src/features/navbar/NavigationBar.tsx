@@ -37,7 +37,7 @@ function NavigationBar() {
                 </Nav>
                 <div className='nav-link active ms-auto me-4'>
                     <div className='text-light justify-content-center'>
-                        {authData && "Welcome back, " + authData.user?.username}.
+                        {authStatus === AuthStatuses.LoggedIn && "Welcome back, " + authData.user?.username}
                     </div>
                 </div>
             </Navbar.Collapse>
