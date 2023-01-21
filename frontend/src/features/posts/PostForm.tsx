@@ -89,7 +89,6 @@ function PostForm() {
                 title: data.title,
                 body: data.body,
                 tags: newTagsArray,
-                rating: 0,
                 user_id: authData.user?.id ? authData.user?.id : 0,
             },
             token: authData.token ? authData.token : "",
@@ -99,9 +98,9 @@ function PostForm() {
         await dispatch(createPostAsync(createPostRequestData))
             .then((response) => {
                 console.log("response: ", response);
-                // redirect to previous page if login successful
+                // redirect to home page if create post successful
                 if (!("error" in response.payload)) {
-                    navigate(-1);
+                    navigate("/");
                 }
                 return response;
             })

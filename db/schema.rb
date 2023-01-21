@@ -16,7 +16,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_12_091807) do
 
   create_table "comments", force: :cascade do |t|
     t.text "body", null: false
-    t.integer "rating", null: false
+    t.integer "rating", default: 0,  null: false
     t.bigint "post_id", null: false
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
@@ -29,7 +29,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_12_091807) do
     t.string "title", null: false
     t.text "body", null: false
     t.string "tags", default: [], null: false, array: true
-    t.integer "rating", null: false
+    t.integer "rating", default: 0, null: false
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

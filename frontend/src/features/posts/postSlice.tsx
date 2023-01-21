@@ -57,7 +57,6 @@ export interface CreatePostRequest {
         title: string;
         body: string;
         tags: string[];
-        rating: number;
         user_id: number;
     },
     token: string;
