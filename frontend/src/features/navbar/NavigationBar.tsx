@@ -7,6 +7,7 @@ function NavigationBar() {
     const authStatus = useAppSelector(selectAuthStatus);
     const authData = useAppSelector(selectAuthData);
     let loginLogoutLink = null;
+    let createPostLink = null;
     let profileLink = null;
     let location = useLocation();
 
@@ -18,6 +19,9 @@ function NavigationBar() {
         loginLogoutLink =
             <Link className={"nav-link" + (location.pathname === "/logout" ? " active" : "")}
                 to="/logout">Logout</Link>;
+        createPostLink = 
+            <Link className={"nav-link" + (location.pathname === "/posts/new" ? " active" : "")}
+                to="/posts/new">Create Post</Link>
         profileLink =
             <Link className={"nav-link" + (location.pathname === "/profile" ? " active" : "")}
                 to="/profile">Profile</Link>
@@ -31,8 +35,7 @@ function NavigationBar() {
                     <Link className={"nav-link" + (location.pathname === "/" ? " active" : "")}
                         to="/">Home</Link>
                     {loginLogoutLink}
-                    <Link className={"nav-link" + (location.pathname === "/posts/new" ? " active" : "")}
-                        to="/posts/new">Create Post</Link>
+                    {createPostLink}
                     {profileLink}
                 </Nav>
                 <div className='nav-link active ms-auto me-4'>
