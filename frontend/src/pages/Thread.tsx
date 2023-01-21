@@ -21,11 +21,11 @@ function Thread() {
       }, [dispatch]);
 
     return (
-        <div className='App container'>
+        <div className='App container' style={{padding: "60px"}}>
             <h3>Post ID: {postId}</h3>
             <h3>User ID: {userId}</h3>
             <Post dispatch={dispatch} post={posts[0]} clickable={false}/>
-            <Comments />
+            <Comments query={searchParams.toString()}/>
         </div>
     )
 }

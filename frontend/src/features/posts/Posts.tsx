@@ -25,7 +25,7 @@ function Posts() {
             <div className='card-body'>
                 {posts && posts.length > 0 && posts.map((post: PostState) => {
                     return (
-                        <Post dispatch={dispatch} post={post} clickable={true}/>
+                        <Post post={post} clickable={true}/>
                     )
                 })}
             </div>

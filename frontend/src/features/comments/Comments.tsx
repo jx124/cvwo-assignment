@@ -4,8 +4,8 @@ import { useAppSelector } from '../../app/hooks'
 import { AppDispatch } from '../../app/store';
 import { CommentState, CommentStatuses, fetchCommentsAsync, selectComments, selectCommentStatus } from './commentSlice';
 
-function Comments() {
-  const query = "post_id=1"; // temporary placeholder. TODO: get query from route
+function Comments(props: any) { // fix any type
+  const query = props.query; // temporary placeholder. TODO: get query from route
   const comments = useAppSelector(selectComments);
   const status = useAppSelector(selectCommentStatus);
   const dispatch = useDispatch<AppDispatch>();
@@ -19,7 +19,8 @@ function Comments() {
   if (status !== CommentStatuses.UpToDate) {
     contents = <div>{status}</div>
   } else {
-    contents = <div className='card'>
+    contents = 
+    <div className='card' style={{margin: "5em"}}>
       <div className='card-body'>
         <p>{status}</p>
         {comments && comments.length > 0 && comments.map((comment: CommentState) => {
