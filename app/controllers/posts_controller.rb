@@ -55,12 +55,13 @@ class PostsController < ApplicationController
   # PATCH/PUT /posts/1 or /posts/1.json
   def update
     respond_to do |format|
-      if @post.update(post_params)
+      if @user.id == @post.user_id
+        @post.update(post_params)
         format.html { redirect_to post_url(@post), notice: "Post was successfully updated." }
         format.json { render :show, status: :ok, location: @post }
       else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @post.errors, status: :unprocessable_entity }
+        format.html { redirect_to posts_url, notice: "User does not have permission to delete post." }
+        format.json { render json: Post.all, status: :unauthorized }
       end
     end
   end
@@ -74,7 +75,7 @@ class PostsController < ApplicationController
         format.json { render json: Post.all, status: :ok }
       else
         format.html { redirect_to posts_url, notice: "User does not have permission to delete post." }
-        format.json { render json: Post.all, status: :unauthorized}
+        format.json { render json: Post.all, status: :unauthorized }
       end
     end
   end

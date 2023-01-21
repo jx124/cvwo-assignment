@@ -8,6 +8,8 @@ import Login from './pages/Login';
 import Logout from './pages/Logout';
 import Thread from './pages/Thread';
 import Signup from './pages/Signup';
+import EditPost from './pages/EditPost';
+import CreatePost from './pages/CreatePost';
 
 function App() {
   return (
@@ -20,7 +22,8 @@ function App() {
           <Route path='/signup' element={<Signup />} />
           <Route path='/logout' element={<Logout />} />
           <Route path='/posts/' element={<Thread />} />
-          <Route path='/posts/new' element={<PostForm />} />
+          <Route path='/posts/new' element={<CreatePost />} />
+          <Route path='/posts/edit' element={<EditPost />} />
         </Routes>
       </Router>
     </div>

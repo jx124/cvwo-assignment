@@ -42,7 +42,7 @@ function SignupForm() {
             .then((response) => {
                 // redirect to previous page if login successful
                 if (!("error" in response.payload)) {
-                    navigate(-1);
+                    navigate("/");
                 }
                 return response;
             });

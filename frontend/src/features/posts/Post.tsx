@@ -56,7 +56,7 @@ function Post(props: any) { // TODO: fix any type
                     <div className='col-auto ms-auto'>
                         <button className='btn btn-outline-secondary dropdown-toggle' data-bs-toggle="dropdown">...</button>
                         <ul className='dropdown-menu dropdown-menu-end'>
-                            <li className='dropdown-item'>Edit</li>
+                            <li className='dropdown-item' onClick={() => linkTo(`/posts/edit/?post_id=${post.id}`)}>Edit</li>
                             <li className='dropdown-item text-danger' onClick={handleDeleteClick}>Delete</li>
                         </ul>
                     </div>
