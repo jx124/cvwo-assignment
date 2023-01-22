@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import produce from "immer";
 import { RootState } from "../../app/store";
-import { fetchComments } from "./commentAPI";
+import { createComment, fetchComments } from "./commentAPI";
 
 export enum CommentStatuses {
     Initial = "Not Fetched",
@@ -53,11 +53,32 @@ const initialState: CommentsState = {
     status: CommentStatuses.Initial, // every comment should have its own status?
 }
 
+export interface CommentFormInput {
+    body: string;
+}
+
+export interface CreateCommentRequest {
+    data: {
+        body: string;
+        post_id: number;
+        user_id: number;
+    },
+    token: string;
+}
+
 export const fetchCommentsAsync = createAsyncThunk(
     "comments/fetchComments",
     async (query: string) => {
         const response = await fetchComments(query);
         console.log("comments/fetchComments response: ", response);
+        return response;
+    }
+)
+
+export const createCommentAsync = createAsyncThunk(
+    "comments/createComment",
+    async (request: CreateCommentRequest) => {
+        const response = await createComment(request);
         return response;
     }
 )
@@ -87,6 +108,27 @@ export const commentSlice = createSlice({
                 })
             })
             .addCase(fetchCommentsAsync.rejected, (state) => {
+                return produce(state, (draftState) => {
+                    draftState.status = CommentStatuses.Error;
+                })
+            })
+            /* Create section */
+            .addCase(createCommentAsync.pending, (state) => {
+                return produce(state, (draftState) => {
+                    draftState.status = CommentStatuses.Loading;
+                })
+            })
+            .addCase(createCommentAsync.fulfilled, (state, action) => {
+                return produce(state, (draftState) => {
+                    if (!("error" in action.payload)) {
+                        draftState.comments.push(action.payload);
+                        draftState.status = CommentStatuses.UpToDate;
+                    } else {
+                        draftState.status = CommentStatuses.Error;
+                    }
+                })
+            })
+            .addCase(createCommentAsync.rejected, (state) => {
                 return produce(state, (draftState) => {
                     draftState.status = CommentStatuses.Error;
                 })

@@ -4,6 +4,7 @@ import { useAppSelector } from '../../app/hooks'
 import { AppDispatch } from '../../app/store';
 import { CommentState, CommentStatuses, fetchCommentsAsync, selectComments, selectCommentStatus } from './commentSlice';
 import Comment from './Comment';
+import CommentForm from './CommentForm';
 
 function Comments(props: any) { // fix any type
     const query = props.query; // temporary placeholder. TODO: get query from route
@@ -32,12 +33,7 @@ function Comments(props: any) { // fix any type
 
     return (
         <div>
-            <div className='card' style={{ margin: "5em" }}>
-                <div className='card-body'>
-                    {/* TODO: add comment form */}
-                    <textarea className='form-control text-start'></textarea>
-                </div>
-            </div>
+            <CommentForm />
             {contents}
         </div>
     )

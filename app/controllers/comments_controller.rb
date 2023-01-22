@@ -1,5 +1,6 @@
 class CommentsController < ApplicationController
   before_action :set_comment, only: %i[ edit update destroy ]
+  skip_before_action :verify_authenticity_token
   skip_before_action :authorized, only: %i[ index show ]
 
   # GET /comments or /comments.json
@@ -40,12 +41,15 @@ class CommentsController < ApplicationController
     @comment = Comment.new(comment_params)
 
     respond_to do |format|
-      if @comment.save
-        format.html { redirect_to comment_url(@comment), notice: "Comment was successfully created." }
-        format.json { render :show, status: :created, location: @comment }
+      if @user.id == @comment.user_id
+        if @comment.save
+          format.json { render json: @comment }
+        else
+          format.html { render :new, status: :unprocessable_entity }
+          format.json { render json: @comment.errors, status: :unprocessable_entity }
+        end
       else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @comment.errors, status: :unprocessable_entity }
+        format.json { render json: @comment, status: :unauthorized }
       end
     end
   end
