@@ -43,7 +43,7 @@ class CommentsController < ApplicationController
     respond_to do |format|
       if @user.id == @comment.user_id
         if @comment.save
-          format.json { render json: @comment }
+          format.json { render json: @comment, status: :created }
         else
           format.html { render :new, status: :unprocessable_entity }
           format.json { render json: @comment.errors, status: :unprocessable_entity }
@@ -57,12 +57,15 @@ class CommentsController < ApplicationController
   # PATCH/PUT /comments/1 or /comments/1.json
   def update
     respond_to do |format|
-      if @comment.update(comment_params)
-        format.html { redirect_to comment_url(@comment), notice: "Comment was successfully updated." }
-        format.json { render :show, status: :ok, location: @comment }
+      if @user.id == @comment.user_id
+        if @comment.update(comment_params)
+          format.json { render json: @comment, status: :ok }
+        else
+          format.html { render :edit, status: :unprocessable_entity }
+          format.json { render json: @comment.errors, status: :unprocessable_entity }
+        end
       else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @comment.errors, status: :unprocessable_entity }
+        format.json { render json: @comment, status: :unauthorized }
       end
     end
   end

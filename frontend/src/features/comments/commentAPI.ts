@@ -1,4 +1,4 @@
-import { CommentsState, CreateCommentRequest } from "./commentSlice";
+import { CommentsState, CreateCommentRequest, UpdateCommentRequest } from "./commentSlice";
 
 const API_URL = "http://localhost:3000";
 
@@ -31,4 +31,21 @@ export async function createComment(request: CreateCommentRequest) {
         console.log("Error: ", error);
         return {} as CommentsState;
     });
+}
+
+export async function updateComment(request: UpdateCommentRequest) {
+    console.log("update request: ", request);
+    return fetch(`${API_URL}/comments/${request.comment_id}.json`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${request.token}`
+        },
+        body: JSON.stringify(request.data),
+    })
+        .then((response) => response.json())
+        .catch((error) => {
+            console.log("Error: ", error);
+            return {} as CommentsState;
+        });
 }

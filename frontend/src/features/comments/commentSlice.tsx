@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import produce from "immer";
 import { RootState } from "../../app/store";
-import { createComment, fetchComments } from "./commentAPI";
+import { createComment, fetchComments, updateComment } from "./commentAPI";
 
 export enum CommentStatuses {
     Initial = "Not Fetched",
@@ -12,7 +12,7 @@ export enum CommentStatuses {
 }
 
 export interface CommentState {
-    id?: string;
+    id?: number;
     body?: string;
     rating?: number;
     post_id?: number;
@@ -23,7 +23,7 @@ export interface CommentState {
 
 export interface CommentProp {
     data: {
-        id?: string;
+        id?: number;
         body?: string;
         rating?: number;
         post_id?: number;
@@ -41,7 +41,7 @@ export interface CommentsState {
 const initialState: CommentsState = {
     comments: [
         {
-            id: "",
+            id: 0,
             body: "",
             rating: 0,
             post_id: 0,
@@ -66,6 +66,14 @@ export interface CreateCommentRequest {
     token: string;
 }
 
+export interface UpdateCommentRequest {
+    comment_id: number,
+    data: {
+        body: string;
+    },
+    token: string;
+}
+
 export const fetchCommentsAsync = createAsyncThunk(
     "comments/fetchComments",
     async (query: string) => {
@@ -79,6 +87,14 @@ export const createCommentAsync = createAsyncThunk(
     "comments/createComment",
     async (request: CreateCommentRequest) => {
         const response = await createComment(request);
+        return response;
+    }
+)
+
+export const updateCommentAsync = createAsyncThunk(
+    "comments/updateComment",
+    async (request: UpdateCommentRequest) => {
+        const response = await updateComment(request);
         return response;
     }
 )
@@ -129,6 +145,26 @@ export const commentSlice = createSlice({
                 })
             })
             .addCase(createCommentAsync.rejected, (state) => {
+                return produce(state, (draftState) => {
+                    draftState.status = CommentStatuses.Error;
+                })
+            })
+            /* Update section */
+            .addCase(updateCommentAsync.pending, (state) => {
+                return produce(state, (draftState) => {
+                    draftState.status = CommentStatuses.Loading;
+                })
+            })
+            .addCase(updateCommentAsync.fulfilled, (state, action) => {
+                return produce(state, (draftState) => {
+                    const index = draftState.comments.findIndex(
+                        (comments) => comments.id === action.payload.id);
+                    
+                    draftState.comments[index] = action.payload;
+                    draftState.status = CommentStatuses.UpToDate;
+                })
+            })
+            .addCase(updateCommentAsync.rejected, (state) => {
                 return produce(state, (draftState) => {
                     draftState.status = CommentStatuses.Error;
                 })

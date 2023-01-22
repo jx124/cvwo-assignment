@@ -1,6 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useDispatch } from 'react-redux';
+import { useAppSelector } from '../../app/hooks';
+import { AppDispatch } from '../../app/store';
+import { selectAuthData, selectAuthStatus } from '../auth/authSlice';
 import { humanReadableDuration } from '../utils/humanReadableDuration';
-import { CommentProp } from './commentSlice'
+import { CommentProp, updateCommentAsync, UpdateCommentRequest } from './commentSlice'
 
 function Comment({ data }: CommentProp) {
     const comment = data;
@@ -9,6 +13,48 @@ function Comment({ data }: CommentProp) {
     const currentTime = new Date().getTime();
     const createdOffset = currentTime - commentCreatedTime;
     const updatedOffset = currentTime - commentUpdatedTime;
+
+    const [isEditing, setIsEditing] = useState(false);
+    const [body, setBody] = useState(comment.body);
+
+    const editableBody = <textarea
+        className='form-control text-start'
+        onChange={(e) => setBody(e.target.value)}>
+        {body}
+    </textarea>
+
+    const authData = useAppSelector(selectAuthData);
+    const authStatus = useAppSelector(selectAuthStatus);
+    const dispatch = useDispatch<AppDispatch>();
+
+    // export interface UpdateCommentRequest {
+    //     comment_id: number,
+    //     data: {
+    //         body: string;
+    //     },
+    //     token: string;
+    // }
+
+    // use a form for this?
+    async function handleEditClick(e: any) {
+        e.preventDefault();
+        console.log(body);
+
+        const request = {
+            comment_id: comment.id,
+            data: {
+                body: body,
+            },
+            token: authData.token
+        } as UpdateCommentRequest
+
+        await dispatch(updateCommentAsync(request))
+            .then((response) => {
+                console.log("update comment response: ", response);
+                setIsEditing(false);
+                return response;
+            });
+    }
 
     return (
         <div className="card text-start px-3 py-2 m-4" key={comment.id}>
@@ -21,17 +67,15 @@ function Comment({ data }: CommentProp) {
                 </div>
                 {createdOffset !== updatedOffset &&
                     <div className='col-auto ps-2'>
-                        <p className='text-secondary'>
-                            <p className='text-secondary fst-italic'>
-                                {" · \u00A0edited " + humanReadableDuration(updatedOffset) + " ago"}
-                            </p>
+                        <p className='text-secondary fst-italic'>
+                            {" · \u00A0edited " + humanReadableDuration(updatedOffset) + " ago"}
                         </p>
                     </div>}
                 <div className='col-auto ms-auto'>
                     <button className='btn btn-outline-secondary btn-sm dropdown-toggle' data-bs-toggle="dropdown">...</button>
                     <ul className='dropdown-menu dropdown-menu-end'>
                         <li className='dropdown-item'
-                        // onClick={() => linkTo(`/posts/edit/?post_id=${post.id}`)}
+                            onClick={() => setIsEditing(true)}
                         >Edit</li>
                         <li className='dropdown-item text-danger'
                         // onClick={handleDeleteClick}
@@ -40,7 +84,7 @@ function Comment({ data }: CommentProp) {
                 </div>
             </div>
             <div className='mb-1'>
-                {comment.body}
+                {isEditing ? editableBody : comment.body}
             </div>
             <div className='row'>
                 <div className='col-auto pt-1'>
@@ -48,6 +92,13 @@ function Comment({ data }: CommentProp) {
                         ᐃ {comment.rating} ᐁ
                     </h5>
                 </div>
+                {isEditing &&
+                    <div className='col-auto ms-auto'>
+                        <button className='btn btn-secondary btn-sm form-control'
+                            disabled={!isEditing}
+                            onClick={handleEditClick}>Edit Comment</button>
+                    </div>
+                }
             </div>
         </div>
     )
