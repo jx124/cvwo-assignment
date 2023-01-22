@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import produce from "immer";
 import { RootState } from "../../app/store";
-import { createComment, fetchComments, updateComment } from "./commentAPI";
+import { createComment, destroyComment, fetchComments, updateComment } from "./commentAPI";
 
 export enum CommentStatuses {
     Initial = "Not Fetched",
@@ -74,6 +74,11 @@ export interface UpdateCommentRequest {
     token: string;
 }
 
+export interface DeleteCommentRequest {
+    comment_id: number,
+    token: string;
+}
+
 export const fetchCommentsAsync = createAsyncThunk(
     "comments/fetchComments",
     async (query: string) => {
@@ -95,6 +100,14 @@ export const updateCommentAsync = createAsyncThunk(
     "comments/updateComment",
     async (request: UpdateCommentRequest) => {
         const response = await updateComment(request);
+        return response;
+    }
+)
+
+export const destroyCommentAsync = createAsyncThunk(
+    "comments/destroyComment",
+    async (request: DeleteCommentRequest) => {
+        const response = await destroyComment(request);
         return response;
     }
 )
@@ -165,6 +178,23 @@ export const commentSlice = createSlice({
                 })
             })
             .addCase(updateCommentAsync.rejected, (state) => {
+                return produce(state, (draftState) => {
+                    draftState.status = CommentStatuses.Error;
+                })
+            })
+            /* Destroy section */
+            .addCase(destroyCommentAsync.pending, (state) => {
+                return produce(state, (draftState) => {
+                    draftState.status = CommentStatuses.Loading;
+                })
+            })
+            .addCase(destroyCommentAsync.fulfilled, (state, action) => {
+                return produce(state, (draftState) => {
+                    draftState.comments = action.payload;
+                    draftState.status = CommentStatuses.UpToDate;
+                })
+            })
+            .addCase(destroyCommentAsync.rejected, (state) => {
                 return produce(state, (draftState) => {
                     draftState.status = CommentStatuses.Error;
                 })

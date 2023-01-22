@@ -1,4 +1,4 @@
-import { CommentsState, CreateCommentRequest, UpdateCommentRequest } from "./commentSlice";
+import { CommentsState, CreateCommentRequest, DeleteCommentRequest, UpdateCommentRequest } from "./commentSlice";
 
 const API_URL = "http://localhost:3000";
 
@@ -42,6 +42,22 @@ export async function updateComment(request: UpdateCommentRequest) {
             "Authorization": `Bearer ${request.token}`
         },
         body: JSON.stringify(request.data),
+    })
+        .then((response) => response.json())
+        .catch((error) => {
+            console.log("Error: ", error);
+            return {} as CommentsState;
+        });
+}
+
+export async function destroyComment(request: DeleteCommentRequest) {
+    console.log("request: ", request);
+    return fetch(`${API_URL}/comments/${request.comment_id}.json`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${request.token}`
+        },
     })
         .then((response) => response.json())
         .catch((error) => {

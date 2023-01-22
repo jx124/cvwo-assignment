@@ -4,7 +4,7 @@ import { useAppSelector } from '../../app/hooks';
 import { AppDispatch } from '../../app/store';
 import { selectAuthData, selectAuthStatus } from '../auth/authSlice';
 import { humanReadableDuration } from '../utils/humanReadableDuration';
-import { CommentProp, updateCommentAsync, UpdateCommentRequest } from './commentSlice'
+import { CommentProp, DeleteCommentRequest, destroyCommentAsync, updateCommentAsync, UpdateCommentRequest } from './commentSlice'
 
 function Comment({ data }: CommentProp) {
     const comment = data;
@@ -56,6 +56,27 @@ function Comment({ data }: CommentProp) {
             });
     }
 
+    async function handleDeleteClick(e: any) {
+        e.preventDefault();
+        console.log(body);
+
+        // export interface DeleteCommentRequest {
+        //     comment_id: number,
+        //     token: string;
+        // }
+
+        const request = {
+            comment_id: comment.id,
+            token: authData.token
+        } as DeleteCommentRequest
+
+        await dispatch(destroyCommentAsync(request))
+            .then((response) => {
+                console.log("destroy comment response: ", response);
+                return response;
+            });
+    }
+
     return (
         <div className="card text-start px-3 py-2 m-4" key={comment.id}>
             <div className='row mt-1'>
@@ -78,7 +99,7 @@ function Comment({ data }: CommentProp) {
                             onClick={() => setIsEditing(true)}
                         >Edit</li>
                         <li className='dropdown-item text-danger'
-                        // onClick={handleDeleteClick}
+                            onClick={handleDeleteClick}
                         >Delete</li>
                     </ul>
                 </div>

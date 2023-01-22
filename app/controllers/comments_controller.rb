@@ -72,11 +72,16 @@ class CommentsController < ApplicationController
 
   # DELETE /comments/1 or /comments/1.json
   def destroy
-    @comment.destroy
+    post_id = @comment.post_id
 
     respond_to do |format|
-      format.html { redirect_to comments_url, notice: "Comment was successfully destroyed." }
-      format.json { head :no_content }
+      if @user.id == @comment.user_id
+        @comment.destroy
+        format.html { redirect_to comments_url, notice: "Comment was successfully destroyed." }
+        format.json { render json: Comment.where("post_id = ?", post_id)}
+      else
+        format.json { render json: Comment.where("post_id = ?", post_id), status: :unauthorized }
+      end
     end
   end
 
