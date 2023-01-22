@@ -21,6 +21,18 @@ export interface CommentState {
     updated_at?: string;
 }
 
+export interface CommentProp {
+    data: {
+        id?: string;
+        body?: string;
+        rating?: number;
+        post_id?: number;
+        user_id?: number;
+        created_at?: string;
+        updated_at?: string;
+    }
+}
+
 export interface CommentsState {
     comments: CommentState[];
     status: CommentStatuses; // every comment should have its own status?

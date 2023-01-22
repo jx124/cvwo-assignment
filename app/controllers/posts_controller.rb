@@ -8,7 +8,7 @@ class PostsController < ApplicationController
     @posts = Post.all
   end
 
-  # GET /posts/1 or /posts/1.json
+  # GET /posts/?post_id=1 or /posts/?post_id=1.json
   def show
     parsed_query = Rack::Utils.parse_nested_query params[:id]
     has_post_id = parsed_query.include?("post_id")    
