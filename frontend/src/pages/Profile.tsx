@@ -55,7 +55,7 @@ function Profile() {
                         <h1 className='text-start'>
                             Comments
                         </h1>
-                        <Comments query={queryString} />
+                        <Comments query={queryString} clickable={true} />
                     </div>
                 </div>
             </div>

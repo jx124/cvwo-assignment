@@ -28,7 +28,7 @@ function Thread() {
             <div style={{margin: "5em"}}>
                 <Post dispatch={dispatch} post={posts[0]} clickable={false}/>
                 <CommentForm />
-                <Comments query={searchParams.toString()}/>
+                <Comments query={searchParams.toString()} clickable={false} />
             </div>
         </div>
     )

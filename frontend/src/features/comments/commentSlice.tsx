@@ -30,7 +30,8 @@ export interface CommentProp {
         user_id?: number;
         created_at?: string;
         updated_at?: string;
-    }
+    },
+    clickable: boolean;
 }
 
 export interface CommentsState {

@@ -25,7 +25,7 @@ function Comments(props: any) { // fix any type
             <div className='card mb-3'>
                 <div className='card-body pb-0'>
                     {comments && comments.length > 0 && comments.map((comment: CommentState) => {
-                        return <Comment data={comment} />
+                        return <Comment data={comment} clickable={props.clickable} />
                     })}
                 </div>
             </div>

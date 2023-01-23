@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks';
 import { AppDispatch } from '../../app/store';
 import { selectAuthData, selectAuthStatus } from '../auth/authSlice';
 import { humanReadableDuration } from '../utils/humanReadableDuration';
 import { CommentProp, DeleteCommentRequest, destroyCommentAsync, updateCommentAsync, UpdateCommentRequest } from './commentSlice'
 
-function Comment({ data }: CommentProp) {
+function Comment({ data, clickable }: CommentProp) {
     const comment = data;
     const commentCreatedTime = new Date(comment.created_at ? comment.created_at : 0).getTime();
     const commentUpdatedTime = new Date(comment.updated_at ? comment.updated_at : 0).getTime();
@@ -16,6 +17,7 @@ function Comment({ data }: CommentProp) {
 
     const [isEditing, setIsEditing] = useState(false);
     const [body, setBody] = useState(comment.body);
+    const [shadow, setShadow] = useState("");
 
     const editableBody = <textarea
         className='form-control text-start'
@@ -27,6 +29,7 @@ function Comment({ data }: CommentProp) {
     const authData = useAppSelector(selectAuthData);
     const authStatus = useAppSelector(selectAuthStatus);
     const dispatch = useDispatch<AppDispatch>();
+    const navigate = useNavigate();
 
     // export interface UpdateCommentRequest {
     //     comment_id: number,
@@ -79,7 +82,13 @@ function Comment({ data }: CommentProp) {
     }
 
     return (
-        <div className="card text-start px-3 py-2 mb-3" key={comment.id}>
+        <div className={shadow + "card text-start px-3 py-2 mb-3"}
+            key={comment.id}
+            style={{ transition: "0.1s" }}
+            onMouseEnter={() => { clickable && setShadow("shadow ") }}
+            onMouseLeave={() => { clickable && setShadow("") }}
+            onClick={() => { clickable && navigate(`/posts/?post_id=${comment.post_id}`) }}>
+
             <div className='row mt-1' style={{ height: "31px" }}>
                 <div className='col-auto pe-1'>
                     <p className='fw-bold'>{comment.user_id}</p>
@@ -93,7 +102,7 @@ function Comment({ data }: CommentProp) {
                             {" · \u00A0edited " + humanReadableDuration(updatedOffset) + " ago"}
                         </p>
                     </div>}
-                {comment.user_id === authData.user?.id &&
+                {!clickable && comment.user_id === authData.user?.id &&
                     <div className='col-auto ms-auto'>
                         <button className='btn btn-outline-secondary btn-sm dropdown-toggle' data-bs-toggle="dropdown">...</button>
                         <ul className='dropdown-menu dropdown-menu-end'>
