@@ -11,20 +11,36 @@ class CommentsController < ApplicationController
   # GET /comments/1 or /comments/1.json
   def show
     parsed_query = Rack::Utils.parse_nested_query params[:id]
-    has_post_id = parsed_query.include?("post_id")    
-    has_user_id = parsed_query.include?("user_id")    
-
+    has_post_id = parsed_query.include?("post_id")
+    has_user_id = parsed_query.include?("user_id")
+    post_id = parsed_query["post_id"]
+    user_id = parsed_query["user_id"]
+    
     if has_post_id and has_user_id
-      @comments = Comment.where("post_id = ? AND user_id = ?", parsed_query["post_id"], parsed_query["user_id"])
+      # @comments = Comment.where("post_id = ? AND user_id = ?", parsed_query["post_id"], parsed_query["user_id"])
+      @comments = Comment.where("comments.post_id = ? AND comments.user_id = ?", post_id, user_id)
+                          .joins(:user)
+                          .select("comments.*", "username")
+                          .as_json()
     elsif has_post_id
-      @comments = Comment.where("post_id = ?", parsed_query["post_id"])
+      # @comments = Comment.where("post_id = ?", parsed_query["post_id"])
+      @comments = Comment.where("comments.post_id = ?", post_id)
+                          .joins(:user)
+                          .select("comments.*", "username")
+                          .as_json()
     elsif has_user_id
-      @comments = Comment.where("user_id = ?", parsed_query["user_id"])
+      # @comments = Comment.where("user_id = ?", parsed_query["user_id"])
+      @comments = Comment.where("comments.user_id = ?", user_id)
+                          .joins(:user)
+                          .select("comments.*", "username")
+                          .as_json()
     else
-      render json: {error: "Invalid query"}
+      render json: {error: "Invalid query"}, status: :unprocessable_entity
+      return
     end
-      
-    render json: @comments
+    puts "\n\n\n"
+    puts "comments #@comments"
+    render json: @comments, status: :ok
   end
 
   # GET /comments/new
@@ -93,6 +109,6 @@ class CommentsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def comment_params
-      params.require(:comment).permit(:body, :rating, :post_id, :user_id)
+      params.require(:comment).permit(:body, :rating, :post_id, :user_id, :username)
     end
 end

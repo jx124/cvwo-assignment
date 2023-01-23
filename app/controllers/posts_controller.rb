@@ -11,27 +11,33 @@ class PostsController < ApplicationController
   # GET /posts/?post_id=1 or /posts/?post_id=1.json
   def show
     parsed_query = Rack::Utils.parse_nested_query params[:id]
-    has_post_id = parsed_query.include?("post_id")    
-    has_user_id = parsed_query.include?("user_id")    
+    has_post_id = parsed_query.include?("post_id")
+    has_user_id = parsed_query.include?("user_id")
+    post_id = parsed_query["post_id"]
+    user_id = parsed_query["user_id"]
 
-    respond_to do |format|
-      if has_post_id and has_user_id
-        puts "in A"
-        @posts = Post.where("id = ? AND user_id = ?", parsed_query["post_id"], parsed_query["user_id"])
-      elsif has_post_id
-        puts "in B"
-        @posts = Post.where("id = ?", parsed_query["post_id"])
-      elsif has_user_id
-        puts "in C"
-        @posts = Post.where("user_id = ?", parsed_query["user_id"])
-      else
-        puts "in D"
-        format.json { render json: Post.all, status: :unprocessable_entity }
-        return
-      end
-        puts "in E, #@posts"
-        format.json { render json: @posts, status: :ok }
+    if has_post_id and has_user_id
+      @posts = Post.where("posts.id = ? AND posts.user_id = ?", post_id, user_id)
+                    .joins(:user)
+                    .select("posts.*", "username")
+                    .as_json()
+    elsif has_post_id
+      @posts = Post.where("posts.id = ?", post_id)
+                    .joins(:user)
+                    .select("posts.*", "username")
+                    .as_json()
+    elsif has_user_id
+      @posts = Post.where("posts.user_id = ?", user_id)
+                    .joins(:user)
+                    .select("posts.*", "username")
+                    .as_json()
+    else
+      render json: {error: "Invalid query"}, status: :unprocessable_entity
+      return
     end
+    puts "\n\n\n"
+    puts "posts: #@posts"
+    render json: @posts, status: :ok
       
   end
 
@@ -100,6 +106,6 @@ class PostsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def post_params
-      params.require(:post).permit(:title, :body, {:tags => []}, :rating, :user_id)
+      params.require(:post).permit(:title, :body, {:tags => []}, :rating, :user_id, :username)
     end
 end
