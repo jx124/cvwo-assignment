@@ -24,6 +24,11 @@ function Comments(props: any) { // fix any type
         contents =
             <div className='card mb-3'>
                 <div className='card-body pb-0'>
+                    {comments.length === 0 &&
+                        <div className='fs-5 mb-3 text-secondary'>
+                            There are no comments yet.
+                        </div>
+                    }
                     {comments && comments.length > 0 && comments.map((comment: CommentState) => {
                         return <Comment data={comment} clickable={props.clickable} />
                     })}

@@ -18,11 +18,18 @@ function Posts() {
 
     let contents = null;
 
+    const createPostLink = <Link to="/posts/new">Create a new post.</Link>
+
     if (status !== PostStatuses.UpToDate) {
         contents = <div>{status}</div>
     } else {
         contents = <div className='card' style={{ margin: "5em" }}>
             <div className='card-body pb-0'>
+                {posts.length === 0 && 
+                    <div className='fs-4 mb-3'>
+                        There are no posts yet. {createPostLink}
+                    </div>
+                }
                 {posts && posts.length > 0 && posts.map((post: PostState) => {
                     return (
                         <Post post={post} clickable={true}/>
@@ -34,7 +41,6 @@ function Posts() {
 
     return (
         <div>
-            {/* <h1>Posts</h1> */}
             {contents}
         </div>
     )
