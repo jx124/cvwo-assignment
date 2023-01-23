@@ -93,17 +93,19 @@ function Comment({ data }: CommentProp) {
                             {" · \u00A0edited " + humanReadableDuration(updatedOffset) + " ago"}
                         </p>
                     </div>}
-                <div className='col-auto ms-auto'>
-                    <button className='btn btn-outline-secondary btn-sm dropdown-toggle' data-bs-toggle="dropdown">...</button>
-                    <ul className='dropdown-menu dropdown-menu-end'>
-                        <li className='dropdown-item'
-                            onClick={() => setIsEditing(true)}
-                        >Edit</li>
-                        <li className='dropdown-item text-danger'
-                            onClick={handleDeleteClick}
-                        >Delete</li>
-                    </ul>
-                </div>
+                {comment.user_id === authData.user?.id &&
+                    <div className='col-auto ms-auto'>
+                        <button className='btn btn-outline-secondary btn-sm dropdown-toggle' data-bs-toggle="dropdown">...</button>
+                        <ul className='dropdown-menu dropdown-menu-end'>
+                            <li className='dropdown-item'
+                                onClick={() => setIsEditing(true)}
+                            >Edit</li>
+                            <li className='dropdown-item text-danger'
+                                onClick={handleDeleteClick}
+                            >Delete</li>
+                        </ul>
+                    </div>
+                }
             </div>
             <div className='my-1'>
                 {isEditing ? editableBody : comment.body}

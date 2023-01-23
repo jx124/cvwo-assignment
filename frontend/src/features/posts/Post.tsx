@@ -72,7 +72,7 @@ function Post(props: any) { // TODO: fix any type
                         </p>
                     </div>
                 }
-                {!clickable &&
+                {!clickable && post.user_id === authData.user?.id &&
                     <div className='col-auto ms-auto'>
                         <button className='btn btn-outline-secondary dropdown-toggle' data-bs-toggle="dropdown">...</button>
                         <ul className='dropdown-menu dropdown-menu-end'>

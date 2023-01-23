@@ -24,10 +24,12 @@ function Thread() {
       }, [dispatch]);
 
     return (
-        <div className='App container' style={{padding: "60px", margin: "auto"}}>
-            <Post dispatch={dispatch} post={posts[0]} clickable={false}/>
-            <CommentForm />
-            <Comments query={searchParams.toString()}/>
+        <div className='App container'>
+            <div style={{margin: "5em"}}>
+                <Post dispatch={dispatch} post={posts[0]} clickable={false}/>
+                <CommentForm />
+                <Comments query={searchParams.toString()}/>
+            </div>
         </div>
     )
 }
