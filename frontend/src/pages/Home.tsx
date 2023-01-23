@@ -1,12 +1,13 @@
-import React from 'react'
+import CheckAuthCookie from '../features/auth/CheckAuthCookie';
 import Posts from '../features/posts/Posts'
 
 function Home() {
-  return (
-    <div className='App container'>
-        <Posts />
-    </div>
-  )
+    CheckAuthCookie();
+    return (
+        <div className='App container'>
+            <Posts />
+        </div>
+    )
 }
 
 export default Home

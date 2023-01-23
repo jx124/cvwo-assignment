@@ -3,8 +3,10 @@ import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { AppDispatch } from '../app/store';
 import { logout } from '../features/auth/authSlice';
+import CheckAuthCookie from '../features/auth/CheckAuthCookie';
 
 function Logout() {
+    CheckAuthCookie();
     const dispatch = useDispatch<AppDispatch>();
     dispatch(logout());
 

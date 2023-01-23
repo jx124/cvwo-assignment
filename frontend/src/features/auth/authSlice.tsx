@@ -88,23 +88,30 @@ export const authSlice = createSlice({
     name: "auth",
     initialState,
     reducers: {
+        setAuthCookie: (state, action) => {
+            state.data = action.payload;
+            state.status = AuthStatuses.LoggedIn
+            return state;
+        },
         logout: (state) => {
+            document.cookie = "auth=;";
             return {...initialState};
         }
     },
     extraReducers: (builder) => {
         builder
             .addCase(sendLoginInfoAsync.pending, (state) => {
-                return produce(state, (draftState) => {
+                return produce(state, (draftState: LoginState) => {
                     draftState.status = AuthStatuses.Loading;
                 })
             })
             .addCase(sendLoginInfoAsync.fulfilled, (state, action: PayloadAction<void | AuthData>) => {
-                return produce(state, (draftState) => {
+                return produce(state, (draftState: LoginState) => {
                     if (action.payload && JSON.stringify(action.payload) === loginError) {
                         draftState.data = action.payload;
                         draftState.status = AuthStatuses.Invalid;
                     } else if (action.payload) {
+                        document.cookie = "auth=" + encodeURIComponent(JSON.stringify(action.payload)) + ";";
                         draftState.data = action.payload;
                         draftState.status = AuthStatuses.LoggedIn;
                     } else {
@@ -113,17 +120,17 @@ export const authSlice = createSlice({
                 })
             })
             .addCase(sendLoginInfoAsync.rejected, (state) => {
-                return produce(state, (draftState) => {
+                return produce(state, (draftState: LoginState) => {
                     draftState.status = AuthStatuses.Error;
                 })
             })
             .addCase(sendSignupInfoAsync.pending, (state) => {
-                return produce(state, (draftState) => {
+                return produce(state, (draftState: LoginState) => {
                     draftState.status = AuthStatuses.Loading;
                 })
             })
             .addCase(sendSignupInfoAsync.fulfilled, (state, action: PayloadAction<void | AuthData>) => {
-                return produce(state, (draftState) => {
+                return produce(state, (draftState: LoginState) => {
                     if (action.payload && JSON.stringify(action.payload) === loginError) {
                         draftState.status = AuthStatuses.Invalid;
                     } else if (action.payload && JSON.stringify(action.payload) === accountTakenError) {
@@ -137,14 +144,14 @@ export const authSlice = createSlice({
                 })
             })
             .addCase(sendSignupInfoAsync.rejected, (state) => {
-                return produce(state, (draftState) => {
+                return produce(state, (draftState: LoginState) => {
                     draftState.status = AuthStatuses.Error;
                 })
             })
     },
 })
 
-export const { logout } = authSlice.actions;
+export const { setAuthCookie, logout } = authSlice.actions;
 
 export const selectAuthData = (state: RootState) => state.auth.data;
 
