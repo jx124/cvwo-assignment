@@ -20,6 +20,7 @@ export interface PostState {
     user_id?: number;
     created_at?: string;
     updated_at?: string;
+    username?: string;
 }
 
 export interface PostsState {
@@ -38,6 +39,7 @@ const initialState: PostsState = {
             user_id: 0,
             created_at: "",
             updated_at: "",
+            username: "",
         }
     ],
 
@@ -195,7 +197,7 @@ export const postSlice = createSlice({
                 return produce(state, (draftState) => {
                     const index = draftState.posts.findIndex(
                         (post) => post.id === action.payload.id);
-                    
+
                     draftState.posts[index] = action.payload;
                     draftState.status = PostStatuses.UpToDate;
                 })

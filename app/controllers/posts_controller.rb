@@ -6,6 +6,11 @@ class PostsController < ApplicationController
   # GET /posts or /posts.json
   def index
     @posts = Post.all
+              .joins(:user)
+              .select("posts.*", "username")
+              .as_json()
+    puts "posts: #@posts"
+    render json: @posts, status: :ok
   end
 
   # GET /posts/?post_id=1 or /posts/?post_id=1.json

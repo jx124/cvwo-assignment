@@ -6,6 +6,11 @@ class CommentsController < ApplicationController
   # GET /comments or /comments.json
   def index
     @comments = Comment.all
+              .joins(:user)
+              .select("comments.*", "username")
+              .as_json()
+    puts "comments: #@comments"
+    render json: @comments, status: :ok
   end
 
   # GET /comments/1 or /comments/1.json
@@ -17,19 +22,16 @@ class CommentsController < ApplicationController
     user_id = parsed_query["user_id"]
     
     if has_post_id and has_user_id
-      # @comments = Comment.where("post_id = ? AND user_id = ?", parsed_query["post_id"], parsed_query["user_id"])
       @comments = Comment.where("comments.post_id = ? AND comments.user_id = ?", post_id, user_id)
                           .joins(:user)
                           .select("comments.*", "username")
                           .as_json()
     elsif has_post_id
-      # @comments = Comment.where("post_id = ?", parsed_query["post_id"])
       @comments = Comment.where("comments.post_id = ?", post_id)
                           .joins(:user)
                           .select("comments.*", "username")
                           .as_json()
     elsif has_user_id
-      # @comments = Comment.where("user_id = ?", parsed_query["user_id"])
       @comments = Comment.where("comments.user_id = ?", user_id)
                           .joins(:user)
                           .select("comments.*", "username")

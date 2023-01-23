@@ -91,7 +91,7 @@ function Comment({ data, clickable }: CommentProp) {
 
             <div className='row mt-1' style={{ height: "31px" }}>
                 <div className='col-auto pe-1'>
-                    <p className='fw-bold'>{comment.user_id}</p>
+                    <p className='fw-bold'>{comment.username}</p>
                 </div>
                 <div className='col-auto ps-1 pe-0'>
                     <p className='text-secondary'>{" · \u00A0" + humanReadableDuration(createdOffset) + " ago"}</p>

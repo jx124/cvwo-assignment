@@ -68,7 +68,7 @@ function Post(props: any) { // TODO: fix any type
                 </div>
                 <div className='col-auto pt-2 ps-2 pe-1'>
                     <p className='text-secondary'>
-                        {" · \u00A0"}Posted by {post.user_id} {humanReadableDuration(createdOffset)} ago
+                        {" · \u00A0"}Posted by {post.username} {humanReadableDuration(createdOffset)} ago
                     </p>
                 </div>
                 {createdOffset !== updatedOffset &&

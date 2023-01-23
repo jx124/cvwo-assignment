@@ -19,6 +19,7 @@ export interface CommentState {
     user_id?: number;
     created_at?: string;
     updated_at?: string;
+    username?: string;
 }
 
 export interface CommentProp {
@@ -30,6 +31,7 @@ export interface CommentProp {
         user_id?: number;
         created_at?: string;
         updated_at?: string;
+        username?: string;
     },
     clickable: boolean;
 }
@@ -49,6 +51,7 @@ const initialState: CommentsState = {
             user_id: 0,
             created_at: "",
             updated_at: "",
+            username: "",
         },
     ],
     status: CommentStatuses.Initial, // every comment should have its own status?
@@ -173,7 +176,7 @@ export const commentSlice = createSlice({
                 return produce(state, (draftState) => {
                     const index = draftState.comments.findIndex(
                         (comments) => comments.id === action.payload.id);
-                    
+
                     draftState.comments[index] = action.payload;
                     draftState.status = CommentStatuses.UpToDate;
                 })
@@ -203,9 +206,9 @@ export const commentSlice = createSlice({
     }
 })
 
-export const {} = commentSlice.actions;
+export const { } = commentSlice.actions;
 
-export const selectComments = (state: RootState) => state.comments.comments; 
+export const selectComments = (state: RootState) => state.comments.comments;
 
 export const selectCommentStatus = (state: RootState) => state.comments.status;
 
