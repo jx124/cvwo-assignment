@@ -10,6 +10,7 @@ import Thread from './pages/Thread';
 import Signup from './pages/Signup';
 import EditPost from './pages/EditPost';
 import CreatePost from './pages/CreatePost';
+import Profile from './pages/Profile';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path='/posts/' element={<Thread />} />
           <Route path='/posts/new' element={<CreatePost />} />
           <Route path='/posts/edit' element={<EditPost />} />
+          <Route path='/profile' element={<Profile />} />
         </Routes>
       </Router>
     </div>

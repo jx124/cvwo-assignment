@@ -51,10 +51,9 @@ function CommentForm(props: any) { // TODO: change todo type
             });
     }
 
-    return (<div>
+    return (<div className='card mb-3'>
         <form onSubmit={handleSubmit(onSubmit)}>
-            <div className='card' style={{ margin: "5em" }}>
-                <div className='card-body px-3 py-2'>
+                <div className='card-body'>
                     <div className='mb-1'>
                         <textarea className='form-control text-start'
                             style={{ height: "100px" }}
@@ -73,7 +72,6 @@ function CommentForm(props: any) { // TODO: change todo type
                         </div>
                     </div>
                 </div>
-            </div>
         </form>
     </div>)
 }

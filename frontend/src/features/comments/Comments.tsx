@@ -22,8 +22,8 @@ function Comments(props: any) { // fix any type
         contents = <div>{status}</div>
     } else {
         contents =
-            <div className='card' style={{ margin: "5em" }}>
-                <div className='card-body'>
+            <div className='card mb-3'>
+                <div className='card-body pb-0'>
                     {comments && comments.length > 0 && comments.map((comment: CommentState) => {
                         return <Comment data={comment} />
                     })}
@@ -33,7 +33,6 @@ function Comments(props: any) { // fix any type
 
     return (
         <div>
-            <CommentForm />
             {contents}
         </div>
     )

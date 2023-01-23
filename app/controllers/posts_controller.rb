@@ -14,17 +14,25 @@ class PostsController < ApplicationController
     has_post_id = parsed_query.include?("post_id")    
     has_user_id = parsed_query.include?("user_id")    
 
-    if has_post_id and has_user_id
-      @posts = Post.where("id = ? AND user_id = ?", parsed_query["post_id"], parsed_query["user_id"])
-    elsif has_post_id
-      @posts = Post.where("id = ?", parsed_query["post_id"])
-    elsif has_user_id
-      @posts = Post.where("user_id = ?", parsed_query["user_id"])
-    else
-      render json: {error: "Invalid query"}
+    respond_to do |format|
+      if has_post_id and has_user_id
+        puts "in A"
+        @posts = Post.where("id = ? AND user_id = ?", parsed_query["post_id"], parsed_query["user_id"])
+      elsif has_post_id
+        puts "in B"
+        @posts = Post.where("id = ?", parsed_query["post_id"])
+      elsif has_user_id
+        puts "in C"
+        @posts = Post.where("user_id = ?", parsed_query["user_id"])
+      else
+        puts "in D"
+        format.json { render json: Post.all, status: :unprocessable_entity }
+        return
+      end
+        puts "in E, #@posts"
+        format.json { render json: @posts, status: :ok }
     end
       
-    render json: @posts
   end
 
   # GET /posts/new

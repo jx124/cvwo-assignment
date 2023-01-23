@@ -47,9 +47,9 @@ function Post(props: any) { // TODO: fix any type
     }
 
     return (
-        <div className={shadow + "card text-start px-3 py-2"}
+        <div className={shadow + "card text-start px-3 py-2 mb-3"}
             key={post.id}
-            style={{ margin: "5em", transition: "0.1s" }}
+            style={{ transition: "0.1s" }}
             onMouseEnter={() => { clickable && setShadow("shadow ") }}
             onMouseLeave={() => { clickable && setShadow("") }}
             onClick={() => { clickable && linkTo(`/posts/?post_id=${post.id}`) }}>

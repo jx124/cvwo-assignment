@@ -19,6 +19,7 @@ function Comment({ data }: CommentProp) {
 
     const editableBody = <textarea
         className='form-control text-start'
+        style={{ minHeight: "100px" }}
         onChange={(e) => setBody(e.target.value)}>
         {body}
     </textarea>
@@ -78,8 +79,8 @@ function Comment({ data }: CommentProp) {
     }
 
     return (
-        <div className="card text-start px-3 py-2 m-4" key={comment.id}>
-            <div className='row mt-1'>
+        <div className="card text-start px-3 py-2 mb-3" key={comment.id}>
+            <div className='row mt-1' style={{ height: "31px" }}>
                 <div className='col-auto pe-1'>
                     <p className='fw-bold'>{comment.user_id}</p>
                 </div>
@@ -104,7 +105,7 @@ function Comment({ data }: CommentProp) {
                     </ul>
                 </div>
             </div>
-            <div className='mb-1'>
+            <div className='my-1'>
                 {isEditing ? editableBody : comment.body}
             </div>
             <div className='row'>

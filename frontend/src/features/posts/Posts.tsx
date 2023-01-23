@@ -22,7 +22,7 @@ function Posts() {
         contents = <div>{status}</div>
     } else {
         contents = <div className='card' style={{ margin: "5em" }}>
-            <div className='card-body'>
+            <div className='card-body pb-0'>
                 {posts && posts.length > 0 && posts.map((post: PostState) => {
                     return (
                         <Post post={post} clickable={true}/>
@@ -34,7 +34,7 @@ function Posts() {
 
     return (
         <div>
-            <h1>Posts</h1>
+            {/* <h1>Posts</h1> */}
             {contents}
         </div>
     )

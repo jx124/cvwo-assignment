@@ -26,7 +26,10 @@ export async function fetchSpecificPosts(queryString: string) {
             // Add auth token here
         },
     })
-        .then((response) => response.json())
+        .then((response) => {
+            const ret = response.json()
+            console.log("response: ", ret);
+            return ret})
         .catch((error) => {
             console.log("Error: ", error);
             return {} as PostsState;
