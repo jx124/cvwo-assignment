@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks';
 import { AppDispatch } from '../../app/store';
 import { selectAuthData } from '../auth/authSlice';
+import { fetchCommentsAsync, selectComments } from '../comments/commentSlice';
 import { humanReadableDuration } from '../utils/humanReadableDuration';
 import { destroyPostAsync } from './postSlice';
 
@@ -19,13 +20,20 @@ function Post(props: any) { // TODO: fix any type
     const updatedOffset = currentTime - postUpdatedTime;
 
     const navigate = useNavigate();
-    const linkTo = (link: string) => {
-        navigate(link);
-    }
-
     const dispatch = useDispatch<AppDispatch>();
-
     const authData = useAppSelector(selectAuthData);
+
+    // fetching all comments to count them seems rather inefficient, maybe add another column to model
+    const [commentCount, setCommentCount] = useState(0);
+
+    useEffect(() => {
+        dispatch(fetchCommentsAsync("post_id=" + post.id))
+            .then((response) => {
+                setCommentCount(response.payload.length);
+            });
+    }, [])
+
+
 
     const handleDeleteClick = async () => {
         const payload = {
@@ -52,7 +60,7 @@ function Post(props: any) { // TODO: fix any type
             style={{ transition: "0.1s" }}
             onMouseEnter={() => { clickable && setShadow("shadow ") }}
             onMouseLeave={() => { clickable && setShadow("") }}
-            onClick={() => { clickable && linkTo(`/posts/?post_id=${post.id}`) }}>
+            onClick={() => { clickable && navigate(`/posts/?post_id=${post.id}`) }}>
 
             <div className='row'>
                 <div className='col-auto pe-0'>
@@ -76,7 +84,7 @@ function Post(props: any) { // TODO: fix any type
                     <div className='col-auto ms-auto'>
                         <button className='btn btn-outline-secondary dropdown-toggle' data-bs-toggle="dropdown">...</button>
                         <ul className='dropdown-menu dropdown-menu-end'>
-                            <li className='dropdown-item' onClick={() => linkTo(`/posts/edit/?post_id=${post.id}`)}>Edit</li>
+                            <li className='dropdown-item' onClick={() => navigate(`/posts/edit/?post_id=${post.id}`)}>Edit</li>
                             <li className='dropdown-item text-danger' onClick={handleDeleteClick}>Delete</li>
                         </ul>
                     </div>
@@ -95,10 +103,7 @@ function Post(props: any) { // TODO: fix any type
                     </h5>
                 </div>
                 <div className='col-auto pt-1'>
-                    <h5>Comments</h5>
-                </div>
-                <div className='col-auto pt-1'>
-                    <h5>Posted by: {post.user_id}</h5>
+                    <h5>{commentCount} Comments</h5>
                 </div>
             </div>
         </div>
