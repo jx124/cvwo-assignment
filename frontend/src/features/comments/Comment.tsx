@@ -136,7 +136,10 @@ function Comment({ data, clickable }: CommentProp) {
             </div>
             <form onSubmit={handleSubmit(handleEditClick)}>
                 <div className='my-1'>
-                    {isEditing ? editableBody : comment.body}
+                    { isEditing 
+                        ? editableBody 
+                        : comment.body?.split('\n')
+                            .map((str: string) => <p className='mb-0'>{str ? str : "\u00A0"}</p>)}
                 </div>
                 <div className='row'>
                     <div className='col-auto pt-1'>

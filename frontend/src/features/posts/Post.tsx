@@ -100,7 +100,9 @@ function Post(props: any) { // TODO: fix any type
                 {post.tags?.map((tag: string) =>
                     <div className='col-auto me-2 py-1 badge rounded-pill text-bg-secondary'>{tag}</div>)}
             </div>
-            <p>{post.body}</p>
+            <div className='mt-1 mb-2'>
+                {post.body.split('\n').map((str: string) => <p className='mb-0'>{str ? str : "\u00A0"}</p>)}
+            </div>
             <div className='row'>
                 <div className='col-auto pt-1'>
                     <h5>
