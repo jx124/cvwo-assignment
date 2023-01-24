@@ -61,7 +61,11 @@ class CommentsController < ApplicationController
     respond_to do |format|
       if @user.id == @comment.user_id
         if @comment.save
-          format.json { render json: @comment, status: :created }
+          data = Comment.where("comments.id = ?", @comment.id)
+                        .joins(:user)
+                        .select("comments.*", "username")
+                        .as_json()
+          format.json { render json: data, status: :created }
         else
           format.html { render :new, status: :unprocessable_entity }
           format.json { render json: @comment.errors, status: :unprocessable_entity }
@@ -77,7 +81,11 @@ class CommentsController < ApplicationController
     respond_to do |format|
       if @user.id == @comment.user_id
         if @comment.update(comment_params)
-          format.json { render json: @comment, status: :ok }
+          data = Comment.where("comments.id = ?", @comment.id)
+                        .joins(:user)
+                        .select("comments.*", "username")
+                        .as_json()
+          format.json { render json: data, status: :ok }
         else
           format.html { render :edit, status: :unprocessable_entity }
           format.json { render json: @comment.errors, status: :unprocessable_entity }

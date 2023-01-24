@@ -27,8 +27,8 @@ function Thread() {
         <div className='App container'>
             <div style={{margin: "5em"}}>
                 <Post dispatch={dispatch} post={posts[0]} clickable={false}/>
-                <CommentForm />
-                <Comments query={searchParams.toString()} clickable={false} />
+                <CommentForm dispatch={dispatch} />
+                <Comments dispatch={dispatch} query={searchParams.toString()} clickable={false} />
             </div>
         </div>
     )

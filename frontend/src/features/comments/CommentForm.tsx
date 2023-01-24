@@ -1,12 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import { useAppSelector } from '../../app/hooks';
 import { AuthStatuses, selectAuthData, selectAuthStatus } from '../auth/authSlice';
 import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../app/store';
 import { useForm } from 'react-hook-form';
-import { CommentFormInput, createCommentAsync, CreateCommentRequest } from './commentSlice';
+import { CommentFormInput, createCommentAsync, CreateCommentRequest, fetchCommentsAsync } from './commentSlice';
 import { useSearchParams } from 'react-router-dom';
 
 const commentSchema = yup.object({
@@ -28,7 +27,7 @@ function CommentForm(props: any) { // TODO: change todo type
 
     const authData = useAppSelector(selectAuthData);
     const authStatus = useAppSelector(selectAuthStatus);
-    const dispatch = useDispatch<AppDispatch>();
+    const dispatch = props.dispatch;
 
     const onSubmit = async (input: CommentFormInput) => {
         // build request from input
@@ -41,37 +40,35 @@ function CommentForm(props: any) { // TODO: change todo type
             token: authData.user ? authData.token : "",
         } as CreateCommentRequest
 
-        console.log("create comment request: ", request)
-
         await dispatch(createCommentAsync(request))
-            .then((response) => {
-                console.log("create comment response: ", response);
+            .then((response: any) => {
                 reset();
+                dispatch(fetchCommentsAsync(searchParams.toString()));
                 return response;
             });
     }
 
     return (<div className='card mb-3'>
         <form onSubmit={handleSubmit(onSubmit)}>
-                <div className='card-body'>
-                    <div className='mb-1'>
-                        <textarea className='form-control text-start'
-                            style={{ height: "100px" }}
-                            placeholder="Add your comment here."
-                            {...register("body")} />
+            <div className='card-body'>
+                <div className='mb-1'>
+                    <textarea className='form-control text-start'
+                        style={{ height: "100px" }}
+                        placeholder="Add your comment here."
+                        {...register("body")} />
+                </div>
+                <div className='row'>
+                    <div className='col-auto form-text text-danger'>
+                        {errors.body?.message}
                     </div>
-                    <div className='row'    >
-                        <div className='col-auto form-text text-danger'>
-                            {errors.body?.message}
-                        </div>
-                        <div className='col-auto ms-auto'>
-                            <input type="submit"
-                                className='btn btn-secondary btn-sm form-control'
-                                disabled={!(authStatus === AuthStatuses.LoggedIn)}
-                                value="Add Comment" />
-                        </div>
+                    <div className='col-auto ms-auto'>
+                        <input type="submit"
+                            className='btn btn-secondary btn-sm form-control'
+                            disabled={!(authStatus === AuthStatuses.LoggedIn)}
+                            value="Add Comment" />
                     </div>
                 </div>
+            </div>
         </form>
     </div>)
 }

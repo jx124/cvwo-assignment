@@ -34,7 +34,6 @@ export async function createComment(request: CreateCommentRequest) {
 }
 
 export async function updateComment(request: UpdateCommentRequest) {
-    console.log("update request: ", request);
     return fetch(`${API_URL}/comments/${request.comment_id}.json`, {
         method: "PUT",
         headers: {
@@ -51,7 +50,6 @@ export async function updateComment(request: UpdateCommentRequest) {
 }
 
 export async function destroyComment(request: DeleteCommentRequest) {
-    console.log("request: ", request);
     return fetch(`${API_URL}/comments/${request.comment_id}.json`, {
         method: "DELETE",
         headers: {

@@ -10,7 +10,8 @@ function Comments(props: any) { // fix any type
     const query = props.query; // temporary placeholder. TODO: get query from route
     const comments = useAppSelector(selectComments);
     const status = useAppSelector(selectCommentStatus);
-    const dispatch = useDispatch<AppDispatch>();
+    // const dispatch = useDispatch<AppDispatch>();
+    const dispatch = props.dispatch;
 
     useEffect(() => {
         dispatch(fetchCommentsAsync(query));

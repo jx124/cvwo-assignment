@@ -1,11 +1,25 @@
 import React, { useState } from 'react'
+import { Modal } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks';
 import { AppDispatch } from '../../app/store';
 import { selectAuthData, selectAuthStatus } from '../auth/authSlice';
 import { humanReadableDuration } from '../utils/humanReadableDuration';
-import { CommentProp, DeleteCommentRequest, destroyCommentAsync, updateCommentAsync, UpdateCommentRequest } from './commentSlice'
+import { CommentFormInput, CommentProp, DeleteCommentRequest, destroyCommentAsync, fetchCommentsAsync, updateCommentAsync, UpdateCommentRequest } from './commentSlice'
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from "yup";
+import { useForm } from 'react-hook-form';
+
+// move to commentSlice?
+const commentSchema = yup.object({
+    body: yup
+        .string()
+        .min(5, "Comment must contain at least 5 characters")
+        .max(1000, "Comment cannot exceed 500 characters")
+        .strict()
+        .required("Comment cannot be empty")
+})
 
 function Comment({ data, clickable }: CommentProp) {
     const comment = data;
@@ -18,16 +32,23 @@ function Comment({ data, clickable }: CommentProp) {
     const [isEditing, setIsEditing] = useState(false);
     const [body, setBody] = useState(comment.body);
     const [shadow, setShadow] = useState("");
+    const [showModal, setShowModal] = useState(false);
+    const [searchParams, setSearchParams] = useSearchParams();
 
-    const editableBody = <textarea
-        className='form-control text-start'
-        style={{ minHeight: "100px" }}
-        onChange={(e) => setBody(e.target.value)}>
-        {body}
-    </textarea>
+    const { register, handleSubmit, formState: { errors } } = useForm<CommentFormInput>({
+        resolver: yupResolver(commentSchema),
+    });
+
+    const editableBody =
+        <textarea
+            className='form-control text-start'
+            style={{ minHeight: "100px" }}
+            value={body}
+            {...register("body")}
+            onChange={(e) => setBody(e.target.value)}>
+        </textarea>
 
     const authData = useAppSelector(selectAuthData);
-    const authStatus = useAppSelector(selectAuthStatus);
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
 
@@ -39,10 +60,7 @@ function Comment({ data, clickable }: CommentProp) {
     //     token: string;
     // }
 
-    // use a form for this?
-    async function handleEditClick(e: any) {
-        e.preventDefault();
-        console.log(body);
+    async function handleEditClick() {
 
         const request = {
             comment_id: comment.id,
@@ -54,15 +72,14 @@ function Comment({ data, clickable }: CommentProp) {
 
         await dispatch(updateCommentAsync(request))
             .then((response) => {
-                console.log("update comment response: ", response);
                 setIsEditing(false);
+                dispatch(fetchCommentsAsync(searchParams.toString()));
                 return response;
             });
     }
 
     async function handleDeleteClick(e: any) {
         e.preventDefault();
-        console.log(body);
 
         // export interface DeleteCommentRequest {
         //     comment_id: number,
@@ -76,12 +93,11 @@ function Comment({ data, clickable }: CommentProp) {
 
         await dispatch(destroyCommentAsync(request))
             .then((response) => {
-                console.log("destroy comment response: ", response);
                 return response;
             });
     }
 
-    return (
+    return (<>
         <div className={shadow + "card text-start px-3 py-2 mb-3"}
             key={comment.id}
             style={{ transition: "0.1s" }}
@@ -107,34 +123,60 @@ function Comment({ data, clickable }: CommentProp) {
                         <button className='btn btn-outline-secondary btn-sm dropdown-toggle' data-bs-toggle="dropdown">...</button>
                         <ul className='dropdown-menu dropdown-menu-end'>
                             <li className='dropdown-item'
+                                key="editDropdown"
                                 onClick={() => setIsEditing(true)}
                             >Edit</li>
                             <li className='dropdown-item text-danger'
-                                onClick={handleDeleteClick}
+                                key="deleteDropdown"
+                                onClick={() => setShowModal(true)}
                             >Delete</li>
                         </ul>
                     </div>
                 }
             </div>
-            <div className='my-1'>
-                {isEditing ? editableBody : comment.body}
-            </div>
-            <div className='row'>
-                <div className='col-auto pt-1'>
-                    <h5>
-                        ᐃ {comment.rating} ᐁ
-                    </h5>
+            <form onSubmit={handleSubmit(handleEditClick)}>
+                <div className='my-1'>
+                    {isEditing ? editableBody : comment.body}
                 </div>
-                {isEditing &&
-                    <div className='col-auto ms-auto'>
-                        <button className='btn btn-secondary btn-sm form-control'
-                            disabled={!isEditing}
-                            onClick={handleEditClick}>Edit Comment</button>
+                <div className='row'>
+                    <div className='col-auto pt-1'>
+                        <h5>
+                            ᐃ {comment.rating} ᐁ
+                        </h5>
                     </div>
-                }
-            </div>
+                    <div className='col-auto form-text text-danger pt-1'>
+                        {errors.body?.message}
+                    </div>
+                    {isEditing &&
+                        <div className='col-auto ms-auto'>
+                            <input className='btn btn-secondary btn-sm form-control'
+                                type="submit"
+                                disabled={!isEditing}
+                                value="Edit Comment" />
+                        </div>
+                    }
+                </div>
+            </form>
         </div>
-    )
+        <Modal show={showModal} onHide={() => setShowModal(false)}>
+            <Modal.Header closeButton>
+                <Modal.Title>
+                    Delete Comment
+                </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                This action is irreversible. Are you sure you want to continue?
+            </Modal.Body>
+            <Modal.Footer>
+                <button className='btn btn-secondary' onClick={() => setShowModal(false)}>
+                    Close
+                </button>
+                <button className='btn btn-danger' onClick={handleDeleteClick}>
+                    Delete
+                </button>
+            </Modal.Footer>
+        </Modal>
+    </>)
 }
 
 export default Comment

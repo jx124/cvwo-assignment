@@ -87,7 +87,6 @@ export const fetchCommentsAsync = createAsyncThunk(
     "comments/fetchComments",
     async (query: string) => {
         const response = await fetchComments(query);
-        console.log("comments/fetchComments response: ", response);
         return response;
     }
 )
@@ -135,7 +134,6 @@ export const commentSlice = createSlice({
             })
             .addCase(fetchCommentsAsync.fulfilled, (state, action) => {
                 return produce(state, (draftState) => {
-                    console.log("Payload in reducer: ", action.payload)
                     draftState.comments = action.payload;
                     draftState.status = CommentStatuses.UpToDate;
                 })

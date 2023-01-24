@@ -15,10 +15,14 @@ function CheckAuthCookie() {
     })
 
     if (containsValidAuthCookie && authStatus !== AuthStatuses.LoggedIn) {
-        const decodedCookie = JSON
-            .parse(decodeURIComponent(document.cookie.trim().split("auth=")[1])) as AuthData;
+        try {
+            const decodedCookie = JSON
+                .parse(decodeURIComponent(document.cookie.trim().split("auth=")[1])) as AuthData;
+                console.log("auth data after dispatch: ", dispatch(setAuthCookie(decodedCookie)));
+        } catch {
+            
+        }
 
-        console.log("auth data after dispatch: ", dispatch(setAuthCookie(decodedCookie)));
     }
 }
 
