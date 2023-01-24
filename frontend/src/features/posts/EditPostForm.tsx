@@ -80,8 +80,6 @@ function EditPostForm(props: any) { // TODO: fix any type
     });
 
     async function onSubmit(data: PostFormInput) {
-        console.log("data: ", data);
-        console.log("token: ", authData.token);
         /* Convert from
     
             tags: {
@@ -110,11 +108,9 @@ function EditPostForm(props: any) { // TODO: fix any type
             },
             token: authData.token ? authData.token : "",
         }
-        console.log("request: ", updatePostRequestData);
 
         await dispatch(updatePostAsync(updatePostRequestData))
             .then((response) => {
-                console.log("response: ", response);
                 // redirect to previous page if edit successful
                 if (!("error" in response.payload)) {
                     navigate(-1);

@@ -25,6 +25,7 @@ export interface PostState {
 
 export interface PostsState {
     posts: PostState[];
+    rankedPosts: PostState[];
     status: PostStatuses;
 }
 
@@ -42,7 +43,19 @@ const initialState: PostsState = {
             username: "",
         }
     ],
-
+    rankedPosts: [
+        {
+            id: 0,
+            title: "",
+            body: "",
+            tags: [],
+            rating: 0,
+            user_id: 0,
+            created_at: "",
+            updated_at: "",
+            username: "",
+        }
+    ],
     status: PostStatuses.Initial
 }
 
@@ -128,7 +141,13 @@ export const postSlice = createSlice({
     initialState,
 
     // Synchronous actions
-    reducers: {},
+    reducers: {
+        setRankedPosts: (state, action) => {
+            return produce(state, (draftState) => {
+                draftState.rankedPosts = action.payload;
+            })
+        }
+    },
 
     // Async actions
     extraReducers: (builder) => {
@@ -224,10 +243,10 @@ export const postSlice = createSlice({
     }
 })
 
-export const { } = postSlice.actions;
+export const { setRankedPosts } = postSlice.actions;
 
 export const selectPosts = (state: RootState) => state.posts.posts;
-
+export const selectRankedPosts = (state: RootState) => state.posts.rankedPosts;
 export const selectPostStatus = (state: RootState) => state.posts.status;
 
 export default postSlice.reducer;

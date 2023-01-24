@@ -4,14 +4,16 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks'
 import { AppDispatch } from '../../app/store';
 import Post from './Post';
-import { fetchPostsAsync, PostState, selectPosts, selectPostStatus, PostStatuses } from './postSlice';
+import { fetchPostsAsync, PostState, selectPosts, selectPostStatus, PostStatuses, selectRankedPosts } from './postSlice';
 
 // Iterates through all posts and renders Post.tsx components
 function Posts() {
     const posts = useAppSelector(selectPosts);
+    const rankedPosts = useAppSelector(selectRankedPosts);
     const status = useAppSelector(selectPostStatus);
     const dispatch = useDispatch<AppDispatch>();
 
+    // fetch posts once at start which updates "posts" state, triggering SearchBar's useEffect hook
     useEffect(() => {
         dispatch(fetchPostsAsync());
     }, [dispatch]);
@@ -23,15 +25,19 @@ function Posts() {
     if (status !== PostStatuses.UpToDate) {
         contents = <div>{status}</div>
     } else {
-        contents = <div className='card' style={{ margin: "5em" }}>
+        contents = <div key="posts" className='card mt-0' style={{ margin: "5em" }}>
             <div className='card-body pb-0'>
                 {posts.length === 0 && 
                     <div className='fs-4 mb-3'>
                         There are no posts yet. {createPostLink}
                     </div>
                 }
-                {posts && posts.length > 0 && posts.map((post: PostState) => {
-                    console.log("Posts post state: ", post);
+                {posts.length !== 0 && rankedPosts.length === 0 && 
+                    <div className='fs-4 mb-3'>
+                        No posts matching search.
+                    </div>
+                }
+                {rankedPosts && rankedPosts.length > 0 && rankedPosts.map((post: PostState) => {
                     return (
                         <Post post={post} clickable={true}/>
                     )

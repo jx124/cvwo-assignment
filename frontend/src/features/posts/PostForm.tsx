@@ -64,8 +64,6 @@ function PostForm() {
     });
 
     async function onSubmit(data: PostFormInput) {
-        console.log("data: ", data);
-        console.log("token: ", authData.token);
         /* Convert from
     
             tags: {
@@ -93,11 +91,9 @@ function PostForm() {
             },
             token: authData.token ? authData.token : "",
         }
-        console.log("request: ", createPostRequestData);
 
         await dispatch(createPostAsync(createPostRequestData))
             .then((response) => {
-                console.log("response: ", response);
                 // redirect to home page if create post successful
                 if (!("error" in response.payload)) {
                     navigate("/");

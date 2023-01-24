@@ -26,10 +26,7 @@ export async function fetchSpecificPosts(queryString: string) {
             // Add auth token here
         },
     })
-        .then((response) => {
-            const ret = response.json()
-            console.log("response: ", ret);
-            return ret})
+        .then((response) => response.json())
         .catch((error) => {
             console.log("Error: ", error);
             return {} as PostsState;
@@ -53,7 +50,6 @@ export async function createPost(request: CreatePostRequest) {
 }
 
 export async function updatePost(request: UpdatePostRequest) {
-    console.log("update request: ", request);
     return fetch(`${API_URL}/posts/${request.post_id}.json`, {
         method: "PUT",
         headers: {
@@ -70,7 +66,6 @@ export async function updatePost(request: UpdatePostRequest) {
 }
 
 export async function destroyPost(request: DeletePostRequest) {
-    console.log("request: ", request);
     return fetch(`${API_URL}/posts/${request.post.post_id}.json`, {
         method: "DELETE",
         headers: {
