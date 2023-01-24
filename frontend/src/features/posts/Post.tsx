@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks';
 import { AppDispatch } from '../../app/store';
 import { selectAuthData } from '../auth/authSlice';
-import { fetchCommentsAsync } from '../comments/commentSlice';
+import { selectComments } from '../comments/commentSlice';
 import { humanReadableDuration } from '../utils/humanReadableDuration';
 import { destroyPostAsync } from './postSlice';
 import Modal from 'react-bootstrap/Modal';
@@ -30,17 +30,16 @@ function Post(props: any) { // TODO: fix any type
 
     const dispatch = useDispatch<AppDispatch>();
     const authData = useAppSelector(selectAuthData);
+    const comments = useAppSelector(selectComments);
 
     // fetching all comments to count them seems rather inefficient, maybe add another column to model
     const [commentCount, setCommentCount] = useState(0);
 
     // fetch comments for current post on mount
     useEffect(() => {
-        dispatch(fetchCommentsAsync("post_id=" + post.id))
-            .then((response) => {
-                setCommentCount(response.payload.length);
-            });
-    }, [])
+        const commentCount = comments.filter((comment) => comment.post_id === post.id).length;
+        setCommentCount(commentCount);
+    }, [comments, post])
 
     const handleDeleteClick = async () => {
         const payload = {
