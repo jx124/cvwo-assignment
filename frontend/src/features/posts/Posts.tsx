@@ -31,6 +31,7 @@ function Posts() {
                     </div>
                 }
                 {posts && posts.length > 0 && posts.map((post: PostState) => {
+                    console.log("Posts post state: ", post);
                     return (
                         <Post post={post} clickable={true}/>
                     )

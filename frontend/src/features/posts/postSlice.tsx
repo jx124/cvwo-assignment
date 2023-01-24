@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 import produce from "immer";
 import { RootState } from "../../app/store";
 import { createPost, fetchPosts, destroyPost, fetchSpecificPosts, updatePost } from "./postAPI";
@@ -118,10 +118,7 @@ export const updatePostAsync = createAsyncThunk(
 export const destroyPostAsync = createAsyncThunk(
     "posts/destroyPost",
     async (request: DeletePostRequest) => {
-        console.log("posts/destroyPost request: ", request);
         const response = await destroyPost(request);
-        console.log("posts/destroyPost response: ", response);
-
         return response;
     }
 )
