@@ -21,6 +21,7 @@ export interface PostState {
     created_at?: string;
     updated_at?: string;
     username?: string;
+    comment_count?: number;
 }
 
 export interface PostsState {
@@ -41,6 +42,7 @@ const initialState: PostsState = {
             created_at: "",
             updated_at: "",
             username: "",
+            comment_count: 0,
         }
     ],
     rankedPosts: [
@@ -54,6 +56,7 @@ const initialState: PostsState = {
             created_at: "",
             updated_at: "",
             username: "",
+            comment_count: 0,
         }
     ],
     status: PostStatuses.Initial

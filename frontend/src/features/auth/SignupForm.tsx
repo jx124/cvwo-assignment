@@ -69,7 +69,7 @@ function SignupForm() {
                                 {...register("username")} />
                             <div className="form-text text-danger" style={{ height: "21px" }}>
                                 {errors.username?.message
-                                    || (loginStatus == AuthStatuses.DuplicateUsername && AuthStatuses.DuplicateUsername)}
+                                    || (loginStatus === AuthStatuses.DuplicateUsername && AuthStatuses.DuplicateUsername)}
                             </div>
                         </div>
                         <div>
@@ -93,7 +93,7 @@ function SignupForm() {
                             <div className="form-text text-danger" style={{ height: "21px" }}>
                                 {errors.confirmPassword?.message}
                             </div>
-                        </div>2
+                        </div>
                         <div className="mb-3">
                             <input
                                 type="submit"

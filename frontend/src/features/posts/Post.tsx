@@ -109,7 +109,7 @@ function Post(props: any) { // TODO: fix any type
                     </h5>
                 </div>
                 <div className='col-auto pt-1'>
-                    <h5>{commentCount} Comments</h5>
+                    <h5>{commentCount > post.comment_count ? commentCount : post.comment_count} Comments</h5>
                 </div>
             </div>
         </div>

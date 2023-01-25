@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { useAppSelector } from '../app/hooks';
 import { AppDispatch } from '../app/store';
 import { selectAuthData } from '../features/auth/authSlice';
@@ -21,6 +22,8 @@ function Profile() {
         dispatch(fetchSpecificPostsAsync(queryString));
     }, []);
 
+    const createPostLink = <Link to="/posts/new">Create a new post.</Link>
+
     return (
         <div className='App container'>
             <div>
@@ -40,12 +43,19 @@ function Profile() {
                         <h1 className='text-start'>
                             Posts
                         </h1>
-                        <div className='card px-3 py-2'>
-                            {posts && posts.length > 0 && posts.map((post: PostState) => {
-                                return (
-                                    <Post post={post} clickable={true} />
-                                )
-                            })}
+                        <div className='card pb-0'>
+                            <div className='card-body pb-0'>
+                                {posts.length === 0 &&
+                                    <div className='fs-5 mb-3 text-secondary'>
+                                        There are no posts yet. {createPostLink}
+                                    </div>
+                                }
+                                {posts && posts.length > 0 && posts.map((post: PostState) => {
+                                    return (
+                                        <Post post={post} clickable={true} />
+                                    )
+                                })}
+                            </div>
                         </div>
                     </div>
                     <div className='card-body mt-0' style={{ margin: "3em" }}>

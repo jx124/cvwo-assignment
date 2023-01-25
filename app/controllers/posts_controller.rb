@@ -6,9 +6,11 @@ class PostsController < ApplicationController
   # GET /posts or /posts.json
   def index
     @posts = Post.all
-              .joins(:user)
-              .select("posts.*", "username")
-              .as_json()
+                  .select("posts.*, username, count(comments.id) as comment_count")
+                  .group("posts.id, users.username")
+                  .joins(:user)
+                  .left_outer_joins(:comment)
+                  .as_json()
     puts "posts: #@posts"
     render json: @posts, status: :ok
   end
@@ -23,18 +25,24 @@ class PostsController < ApplicationController
 
     if has_post_id and has_user_id
       @posts = Post.where("posts.id = ? AND posts.user_id = ?", post_id, user_id)
+                    .select("posts.*, username, count(comments.id) as comment_count")
+                    .group("posts.id, users.username")
                     .joins(:user)
-                    .select("posts.*", "username")
+                    .left_outer_joins(:comment)
                     .as_json()
     elsif has_post_id
       @posts = Post.where("posts.id = ?", post_id)
+                    .select("posts.*, username, count(comments.id) as comment_count")
+                    .group("posts.id, users.username")
                     .joins(:user)
-                    .select("posts.*", "username")
+                    .left_outer_joins(:comment)
                     .as_json()
     elsif has_user_id
       @posts = Post.where("posts.user_id = ?", user_id)
+                    .select("posts.*, username, count(comments.id) as comment_count")
+                    .group("posts.id, users.username")
                     .joins(:user)
-                    .select("posts.*", "username")
+                    .left_outer_joins(:comment)
                     .as_json()
     else
       render json: {error: "Invalid query"}, status: :unprocessable_entity
