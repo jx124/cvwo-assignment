@@ -1,12 +1,10 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../app/hooks';
 import { AppDispatch } from '../app/store';
 import { selectAuthData } from '../features/auth/authSlice';
 import CheckAuthCookie from '../features/auth/CheckAuthCookie';
-import Comment from '../features/comments/Comment';
 import Comments from '../features/comments/Comments';
-import { CommentState, selectComments } from '../features/comments/commentSlice';
 import Post from '../features/posts/Post';
 import { fetchSpecificPostsAsync, PostState, selectPosts } from '../features/posts/postSlice';
 
@@ -20,7 +18,6 @@ function Profile() {
     const queryString = "user_id=" + authData.user?.id;
 
     useEffect(() => {
-        console.log("query string: ", queryString);
         dispatch(fetchSpecificPostsAsync(queryString));
     }, []);
 

@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useDispatch } from 'react-redux';
-import { useParams, useSearchParams } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 import { useAppSelector } from '../app/hooks';
 import { AppDispatch } from '../app/store';
 import CheckAuthCookie from '../features/auth/CheckAuthCookie';
@@ -12,11 +12,8 @@ import { fetchSpecificPostsAsync, selectPosts, selectPostStatus } from '../featu
 function Thread() {
     CheckAuthCookie();
     const [searchParams, setSearchParams] = useSearchParams();
-    const postId = searchParams.get("post_id");
-    const userId = searchParams.get("user_id");
 
     const posts = useAppSelector(selectPosts);
-    const status = useAppSelector(selectPostStatus);
     const dispatch = useDispatch<AppDispatch>();
 
     useEffect(() => {

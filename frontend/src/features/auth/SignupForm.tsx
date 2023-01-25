@@ -84,7 +84,7 @@ function SignupForm() {
                             </div>
                         </div>
                         <div className="mb-1">
-                            <label htmlFor="formConfirmPassword" className="form-label">Password</label>
+                            <label htmlFor="formConfirmPassword" className="form-label">Confirm Password</label>
                             <input
                                 type="password"
                                 className="form-control"
@@ -93,7 +93,7 @@ function SignupForm() {
                             <div className="form-text text-danger" style={{ height: "21px" }}>
                                 {errors.confirmPassword?.message}
                             </div>
-                        </div>
+                        </div>2
                         <div className="mb-3">
                             <input
                                 type="submit"

@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { useAppSelector } from '../../app/hooks';
-import { fetchPostsAsync, PostState, selectPosts, setRankedPosts } from '../posts/postSlice';
+import { PostState, selectPosts, setRankedPosts } from '../posts/postSlice';
 import { debounce } from 'lodash';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../app/store';

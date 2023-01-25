@@ -1,10 +1,9 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../app/hooks'
 import { AppDispatch } from '../../app/store';
 import { CommentState, CommentStatuses, fetchCommentsAsync, selectComments, selectCommentStatus } from './commentSlice';
 import Comment from './Comment';
-import CommentForm from './CommentForm';
 
 function Comments(props: any) { // fix any type
     const query = props.query; // temporary placeholder. TODO: get query from route

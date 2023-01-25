@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../app/hooks";
 import { AppDispatch } from "../../app/store";
-import { LoginFormInput, AuthStatuses, selectAuthStatus, sendLoginInfoAsync, logout } from "./authSlice";
+import { LoginFormInput, AuthStatuses, selectAuthStatus, sendLoginInfoAsync } from "./authSlice";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import { Link, useNavigate } from "react-router-dom";

@@ -1,4 +1,3 @@
-import React from 'react'
 import CheckAuthCookie from '../features/auth/CheckAuthCookie';
 import EditPostForm from '../features/posts/EditPostForm'
 

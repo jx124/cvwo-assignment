@@ -1,4 +1,3 @@
-import { AuthData } from "../auth/authSlice";
 import { CreatePostRequest, DeletePostRequest, PostsState, UpdatePostRequest } from "./postSlice";
 
 const API_URL = "http://localhost:3000";

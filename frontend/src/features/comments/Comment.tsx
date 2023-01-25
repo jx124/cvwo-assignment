@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Modal } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks';
 import { AppDispatch } from '../../app/store';
-import { selectAuthData, selectAuthStatus } from '../auth/authSlice';
+import { selectAuthData } from '../auth/authSlice';
 import { humanReadableDuration } from '../utils/humanReadableDuration';
 import { CommentFormInput, CommentProp, DeleteCommentRequest, destroyCommentAsync, fetchCommentsAsync, updateCommentAsync, UpdateCommentRequest } from './commentSlice'
 import { yupResolver } from '@hookform/resolvers/yup';

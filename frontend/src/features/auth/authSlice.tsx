@@ -5,7 +5,6 @@ import { sendLoginInfo, sendSignupInfo } from "./authAPI";
 
 /**
  * This file defines the interfaces and implements slices and reducers for logging in.
- * TODO: Clean up console.logs, make error handling more elegant, propagate error to form
  */
 
 export enum AuthStatuses {
@@ -70,7 +69,6 @@ export const sendLoginInfoAsync = createAsyncThunk(
     "auth/sendLoginInfo",
     async (data: LoginFormInput) => {
         const response = await sendLoginInfo(data);
-        console.log("auth/sendLoginInfo: received data in thunk: ", response);
         return response;
     }
 )
@@ -79,7 +77,6 @@ export const sendSignupInfoAsync = createAsyncThunk(
     "auth/sendSignupInfo",
     async (data: SignupFormInput) => {
         const response = await sendSignupInfo(data);
-        console.log("auth/sendSignupInfo: received data in thunk: ", response);
         return response;
     }
 )

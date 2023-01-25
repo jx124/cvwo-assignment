@@ -1,14 +1,12 @@
-import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from '../../app/store';
 import { FieldArrayWithId, useFieldArray, useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
-import { createPostAsync, CreatePostRequest, PostFormInput, selectPosts, selectPostStatus, updatePostAsync, UpdatePostRequest } from './postSlice';
+import { PostFormInput, selectPosts, updatePostAsync, UpdatePostRequest } from './postSlice';
 import { useAppSelector } from '../../app/hooks';
 import { selectAuthData } from '../auth/authSlice';
 import { useNavigate } from 'react-router-dom';
-import { toInteger } from 'lodash';
 
 const tagSchema = yup.object({
     item: yup

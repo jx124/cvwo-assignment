@@ -204,10 +204,9 @@ export const commentSlice = createSlice({
     }
 })
 
-export const { } = commentSlice.actions;
+export const {} = commentSlice.actions;
 
 export const selectComments = (state: RootState) => state.comments.comments;
-
 export const selectCommentStatus = (state: RootState) => state.comments.status;
 
 export default commentSlice.reducer;

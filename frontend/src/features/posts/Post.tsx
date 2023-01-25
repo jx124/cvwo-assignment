@@ -89,7 +89,6 @@ function Post(props: any) { // TODO: fix any type
                         <button className='btn btn-outline-secondary dropdown-toggle' data-bs-toggle="dropdown">...</button>
                         <ul className='dropdown-menu dropdown-menu-end'>
                             <li className='dropdown-item' onClick={() => navigate(`/posts/edit/?post_id=${post.id}`)}>Edit</li>
-                            {/* <li className='dropdown-item text-danger' onClick={handleDeleteClick}>Delete</li> */}
                             <li className='dropdown-item text-danger' onClick={() => setShowModal(true)}>Delete</li>
                         </ul>
                     </div>

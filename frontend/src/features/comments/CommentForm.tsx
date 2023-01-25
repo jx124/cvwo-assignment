@@ -1,9 +1,7 @@
-import React, { useEffect } from 'react'
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import { useAppSelector } from '../../app/hooks';
 import { AuthStatuses, selectAuthData, selectAuthStatus } from '../auth/authSlice';
-import { useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { CommentFormInput, createCommentAsync, CreateCommentRequest, fetchCommentsAsync } from './commentSlice';
 import { useSearchParams } from 'react-router-dom';
