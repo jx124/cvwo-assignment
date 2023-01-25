@@ -7,7 +7,7 @@ import CheckAuthCookie from '../features/auth/CheckAuthCookie';
 import CommentForm from '../features/comments/CommentForm';
 import Comments from '../features/comments/Comments';
 import Post from '../features/posts/Post';
-import { fetchSpecificPostsAsync, selectPosts, selectPostStatus } from '../features/posts/postSlice';
+import { fetchSpecificPostsAsync, selectPosts } from '../features/posts/postSlice';
 
 function Thread() {
     CheckAuthCookie();

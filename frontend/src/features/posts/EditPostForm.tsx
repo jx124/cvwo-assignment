@@ -41,6 +41,10 @@ const postSchema = yup.object({
         .required(),
 })
 
+/**
+ * Form for editing a post. Almost the same as the create post form except it autofills
+ * with the original post content and calls a different async thunk.
+ */
 function EditPostForm(props: any) { // TODO: fix any type
     const dispatch = useDispatch<AppDispatch>();
     const authData = useAppSelector(selectAuthData);
@@ -67,11 +71,13 @@ function EditPostForm(props: any) { // TODO: fix any type
             : [];
     }
 
+    // main form
     const { register, control, handleSubmit, formState: { errors } } = useForm<PostFormInput>({
         resolver: yupResolver(postSchema),
         defaultValues: autofillPostContent,
     });
 
+    // dynamic tag fields
     const { fields, append, remove } = useFieldArray({
         name: "tags",
         control

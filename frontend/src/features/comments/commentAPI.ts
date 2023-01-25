@@ -2,12 +2,16 @@ import { CommentsState, CreateCommentRequest, DeleteCommentRequest, UpdateCommen
 
 const API_URL = "http://localhost:3000";
 
+/**
+ * This file contains all API methods for comment CRUD operations.
+ */
+
+// query includes post_id and/or user_id
 export async function fetchComments(query: string) {
     return fetch(`${API_URL}/comments/${query}.json`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
-            // Add auth token here
         },
     })
     .then((response) => response.json())

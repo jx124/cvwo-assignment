@@ -41,11 +41,15 @@ const postSchema = yup.object({
         .required(),
 })
 
+/**
+ * Form for creating a new post. Validates inputs before submission.
+ */
 function PostForm() {
     const dispatch = useDispatch<AppDispatch>();
     const authData = useAppSelector(selectAuthData);
     const navigate = useNavigate();
 
+    // main form
     const { register, control, handleSubmit, formState: { errors } } = useForm<PostFormInput>({
         resolver: yupResolver(postSchema),
         defaultValues: {
@@ -57,6 +61,7 @@ function PostForm() {
         }
     });
 
+    // dynamic tag fields
     const { fields, append, remove } = useFieldArray({
         name: "tags",
         control

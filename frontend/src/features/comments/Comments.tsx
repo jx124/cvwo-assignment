@@ -5,6 +5,9 @@ import { AppDispatch } from '../../app/store';
 import { CommentState, CommentStatuses, fetchCommentsAsync, selectComments, selectCommentStatus } from './commentSlice';
 import Comment from './Comment';
 
+/**
+ * Main comments component. Fetches comments and sends each comment to be rendered in the Comment component.
+ */
 function Comments(props: any) { // fix any type
     const query = props.query; // temporary placeholder. TODO: get query from route
     const comments = useAppSelector(selectComments);

@@ -9,6 +9,9 @@ import { humanReadableDuration } from '../utils/humanReadableDuration';
 import { destroyPostAsync } from './postSlice';
 import Modal from 'react-bootstrap/Modal';
 
+/**
+ * Post component. Displays all relevant information of a post in a card.
+ */
 function Post(props: any) { // TODO: fix any type
     const post = props.post;
     const navigate = useNavigate();
@@ -18,6 +21,11 @@ function Post(props: any) { // TODO: fix any type
         navigate("/")
     }
 
+    /**
+     *  "clickable" means post can be clicked and linked to, e.g. from main or profile pages.
+     *  This means the drop shadow animations will be visible and the dropdown menu to edit or
+     *  delete post will not be visible.
+     */
     const clickable = props.clickable;
     const [shadow, setShadow] = useState("");
     const [showModal, setShowModal] = useState(false);
@@ -32,10 +40,9 @@ function Post(props: any) { // TODO: fix any type
     const authData = useAppSelector(selectAuthData);
     const comments = useAppSelector(selectComments);
 
-    // fetching all comments to count them seems rather inefficient, maybe add another column to model
     const [commentCount, setCommentCount] = useState(0);
 
-    // fetch comments for current post on mount
+    // fetch comments for current post on change
     useEffect(() => {
         const commentCount = comments.filter((comment) => comment.post_id === post.id).length;
         setCommentCount(commentCount);
@@ -109,10 +116,12 @@ function Post(props: any) { // TODO: fix any type
                     </h5>
                 </div>
                 <div className='col-auto pt-1'>
-                    <h5>{commentCount > post.comment_count ? commentCount : post.comment_count} Comments</h5>
+                    {/* Use updated comment counts when comments are edited/deleted but post not refetched */}
+                    <h5>{commentCount !== post.comment_count ? commentCount : post.comment_count} Comments</h5>
                 </div>
             </div>
         </div>
+        {/* Popup confirmation when deleting post */}
         <Modal show={showModal} onHide={() => setShowModal(false)}>
             <Modal.Header closeButton>
                 <Modal.Title>

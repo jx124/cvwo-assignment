@@ -21,6 +21,9 @@ const commentSchema = yup.object({
         .required("Comment cannot be empty")
 })
 
+/**
+ * Comment component. Displays all relevant information of a comment in a card.
+ */
 function Comment({ data, clickable }: CommentProp) {
     const comment = data;
     const commentCreatedTime = new Date(comment.created_at ? comment.created_at : 0).getTime();

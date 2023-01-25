@@ -4,7 +4,7 @@ import { RootState } from "../../app/store";
 import { sendLoginInfo, sendSignupInfo } from "./authAPI";
 
 /**
- * This file defines the interfaces and implements slices and reducers for logging in.
+ * This file defines the authentication interfaces and implements their async thunks and reducers.
  */
 
 export enum AuthStatuses {
@@ -151,7 +151,6 @@ export const authSlice = createSlice({
 export const { setAuthCookie, logout } = authSlice.actions;
 
 export const selectAuthData = (state: RootState) => state.auth.data;
-
 export const selectAuthStatus = (state: RootState) => state.auth.status;
 
 export default authSlice.reducer;

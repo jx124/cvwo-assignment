@@ -15,6 +15,9 @@ const commentSchema = yup.object({
         .required("Comment cannot be empty")
 })
 
+/**
+ * Form to create a new comment. Does input validation before sending the request.
+ */
 function CommentForm(props: any) { // TODO: change todo type
     const { register, handleSubmit, reset, formState: { errors } } = useForm<CommentFormInput>({
         resolver: yupResolver(commentSchema),

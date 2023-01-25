@@ -6,6 +6,9 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../app/store';
 import { getSearchResults } from './search';
 
+/** Search bar component. Checks search field and searches through posts state, then
+ *  updates results to rankedPosts state.
+ */
 function SearchBar() {
     const posts = useAppSelector(selectPosts);
     const dispatch = useDispatch<AppDispatch>();
@@ -19,6 +22,7 @@ function SearchBar() {
         updateSearchResults(posts, [""]);
     }, [posts])
 
+    // debounce search to only update results every 200ms on search change
     const searchHandler = useCallback(debounce(updateSearchResults, 200), []);
 
     const onSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {

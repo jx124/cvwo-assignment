@@ -3,6 +3,10 @@ import { useAppSelector } from '../../app/hooks';
 import { AppDispatch } from '../../app/store';
 import { AuthData, AuthStatuses, selectAuthStatus, setAuthCookie } from './authSlice';
 
+/**
+ * Checks if user has previously logged in before. If so, extract token from cookie and 
+ * set authentication state.
+ */
 function CheckAuthCookie() {
     const dispatch = useDispatch<AppDispatch>();
     const authStatus = useAppSelector(selectAuthStatus);

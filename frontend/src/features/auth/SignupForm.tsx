@@ -28,6 +28,10 @@ const signupSchema = yup.object({
             .required(),
 });
 
+/**
+ * Form for signing up. Performs input validation before sending sign up information.
+ * Backend checks if username is already taken, if not, automatically logs in.
+ */
 function SignupForm() {
     const { register, handleSubmit, formState: { errors } } = useForm<SignupFormInput>({
         resolver: yupResolver(signupSchema),

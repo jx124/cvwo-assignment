@@ -1,5 +1,9 @@
 import { CreatePostRequest, DeletePostRequest, PostsState, UpdatePostRequest } from "./postSlice";
 
+/**
+ * This file contains all API methods for post CRUD operations.
+ */
+
 const API_URL = "http://localhost:3000";
 
 export async function fetchPosts() {

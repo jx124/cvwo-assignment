@@ -1,7 +1,7 @@
 import { LoginFormInput, AuthData, SignupFormInput } from "./authSlice";
 
 /**
- * This file contains all API methods for logging in.
+ * This file contains all API methods for logging in or signing up.
  */
 
 const API_URL = "http://localhost:3000";

@@ -3,6 +3,10 @@ import produce from "immer";
 import { RootState } from "../../app/store";
 import { createComment, destroyComment, fetchComments, updateComment } from "./commentAPI";
 
+/**
+ * This file defines the comment interfaces and implements their async thunks and reducers.
+ */
+
 export enum CommentStatuses {
     Initial = "Not Fetched",
     Loading = "Loading...",
@@ -38,7 +42,7 @@ export interface CommentProp {
 
 export interface CommentsState {
     comments: CommentState[];
-    status: CommentStatuses; // every comment should have its own status?
+    status: CommentStatuses;
 }
 
 const initialState: CommentsState = {
@@ -128,7 +132,6 @@ export const commentSlice = createSlice({
             /* Fetch section */
             .addCase(fetchCommentsAsync.pending, (state) => {
                 return produce(state, (draftState) => {
-                    // draftState is a copy of the actual state which will be applied appropriately
                     draftState.status = CommentStatuses.Loading;
                 })
             })

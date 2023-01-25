@@ -6,7 +6,9 @@ import { AppDispatch } from '../../app/store';
 import Post from './Post';
 import { fetchPostsAsync, PostState, selectPosts, selectPostStatus, PostStatuses, selectRankedPosts } from './postSlice';
 
-// Iterates through all posts and renders Post.tsx components
+/**
+ * Main posts component. Fetches posts and sends each posts to be rendered in the Post component.
+ */
 function Posts() {
     const posts = useAppSelector(selectPosts);
     const rankedPosts = useAppSelector(selectRankedPosts);

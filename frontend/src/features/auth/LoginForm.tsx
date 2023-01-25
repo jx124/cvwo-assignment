@@ -7,16 +7,14 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
 
-
-/**
- * This file renders the React components of the Login page.
- */
-
 const loginSchema = yup.object({
     username: yup.string().required("Username required"),
     password: yup.string().required("Password required"),
 });
 
+/**
+ * Form for logging in. 
+ */
 function LoginForm() {
     const { register, handleSubmit, formState: { errors } } = useForm<LoginFormInput>({
         resolver: yupResolver(loginSchema),

@@ -3,6 +3,10 @@ import { Link, useLocation } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks';
 import { AuthStatuses, selectAuthData, selectAuthStatus } from '../auth/authSlice';
 
+/**
+ * Navbar component. Contains links to other parts of the website that dynamically shows up 
+ * when the user is logged in.
+ */
 function NavigationBar() {
     const authStatus = useAppSelector(selectAuthStatus);
     const authData = useAppSelector(selectAuthData);
@@ -14,7 +18,7 @@ function NavigationBar() {
     if (authStatus !== AuthStatuses.LoggedIn) {
         loginLogoutLink =
             <Link className={"nav-link" + (location.pathname === "/login" ? " active" : "")}
-                to="/login">Login</Link>;
+                to="/login">Login to Create Post</Link>;
     } else {
         loginLogoutLink =
             <Link className={"nav-link" + (location.pathname === "/logout" ? " active" : "")}

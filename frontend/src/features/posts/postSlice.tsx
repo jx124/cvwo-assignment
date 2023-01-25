@@ -3,6 +3,10 @@ import produce from "immer";
 import { RootState } from "../../app/store";
 import { createPost, fetchPosts, destroyPost, fetchSpecificPosts, updatePost } from "./postAPI";
 
+/**
+ * This file defines the post interfaces and implements their async thunks and reducers.
+ */
+
 export enum PostStatuses {
     Initial = "Not Fetched",
     Loading = "Loading...",
@@ -158,7 +162,6 @@ export const postSlice = createSlice({
             /* Fetch section */
             .addCase(fetchPostsAsync.pending, (state) => {
                 return produce(state, (draftState) => {
-                    // draftState is a copy of the actual state which will be applied appropriately
                     draftState.status = PostStatuses.Loading;
                 })
             })
