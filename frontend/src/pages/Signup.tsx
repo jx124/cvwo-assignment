@@ -4,10 +4,10 @@ import SignupForm from '../features/auth/SignupForm';
 function Signup() {
     CheckAuthCookie();
     return (
-    <div className='App container'>
-        <SignupForm />
-    </div>
-  )
+        <div className='App container'>
+            <SignupForm />
+        </div>
+    )
 }
 
 export default Signup

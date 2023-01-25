@@ -11,12 +11,11 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import { useForm } from 'react-hook-form';
 
-// move to commentSlice?
 const commentSchema = yup.object({
     body: yup
         .string()
         .min(5, "Comment must contain at least 5 characters")
-        .max(1000, "Comment cannot exceed 500 characters")
+        .max(1000, "Comment cannot exceed 1000 characters")
         .strict()
         .required("Comment cannot be empty")
 })
@@ -145,11 +144,6 @@ function Comment({ data, clickable }: CommentProp) {
                             .map((str: string) => <p className='mb-0'>{str ? str : "\u00A0"}</p>)}
                 </div>
                 <div className='row'>
-                    <div className='col-auto pt-1'>
-                        <h5>
-                            ᐃ {comment.rating} ᐁ
-                        </h5>
-                    </div>
                     <div className='col-auto form-text text-danger pt-1'>
                         {errors.body?.message}
                     </div>

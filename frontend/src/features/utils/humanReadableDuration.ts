@@ -1,3 +1,4 @@
+// converts milliseconds into human readable duration, e.g. 2 days ago
 export function humanReadableDuration(milliseconds: number) {
     function numberEnding(number: number) {
         return (number > 1) ? 's' : '';

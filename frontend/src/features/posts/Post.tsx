@@ -111,11 +111,6 @@ function Post(props: any) { // TODO: fix any type
             </div>
             <div className='row'>
                 <div className='col-auto pt-1'>
-                    <h5>
-                        ᐃ {post.rating} ᐁ
-                    </h5>
-                </div>
-                <div className='col-auto pt-1'>
                     {/* Use updated comment counts when comments are edited/deleted but post not refetched */}
                     <h5>{commentCount !== post.comment_count ? commentCount : post.comment_count} Comments</h5>
                 </div>
