@@ -11,7 +11,6 @@ class PostsController < ApplicationController
                   .joins(:user)
                   .left_outer_joins(:comment)
                   .as_json()
-    puts "posts: #@posts"
     render json: @posts, status: :ok
   end
 
@@ -48,8 +47,6 @@ class PostsController < ApplicationController
       render json: {error: "Invalid query"}, status: :unprocessable_entity
       return
     end
-    puts "\n\n\n"
-    puts "posts: #@posts"
     render json: @posts, status: :ok
       
   end

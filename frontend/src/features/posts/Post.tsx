@@ -12,7 +12,7 @@ import Modal from 'react-bootstrap/Modal';
 /**
  * Post component. Displays all relevant information of a post in a card.
  */
-function Post(props: any) { // TODO: fix any type
+function Post(props: any) {
     const post = props.post;
     const navigate = useNavigate();
 

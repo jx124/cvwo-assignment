@@ -20,8 +20,8 @@ function CheckAuthCookie() {
             const decodedCookie = JSON
                 .parse(decodeURIComponent(document.cookie.trim().split("auth=")[1])) as AuthData;
             dispatch(setAuthCookie(decodedCookie));
-        } catch {
-            
+        } catch(e) {
+            console.error(e);
         }
 
     }

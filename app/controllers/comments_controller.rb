@@ -9,7 +9,6 @@ class CommentsController < ApplicationController
               .joins(:user)
               .select("comments.*", "username")
               .as_json()
-    puts "comments: #@comments"
     render json: @comments, status: :ok
   end
 
@@ -40,8 +39,7 @@ class CommentsController < ApplicationController
       render json: {error: "Invalid query"}, status: :unprocessable_entity
       return
     end
-    puts "\n\n\n"
-    puts "comments #@comments"
+
     render json: @comments, status: :ok
   end
 

@@ -108,7 +108,9 @@ export const authSlice = createSlice({
                         draftState.data = action.payload;
                         draftState.status = AuthStatuses.Invalid;
                     } else if (action.payload) {
-                        document.cookie = "auth=" + encodeURIComponent(JSON.stringify(action.payload)) + ";";
+                        document.cookie = "auth=" 
+                            + encodeURIComponent(JSON.stringify(action.payload))
+                            + ";path=/;SameSite=Lax;";
                         draftState.data = action.payload;
                         draftState.status = AuthStatuses.LoggedIn;
                     } else {

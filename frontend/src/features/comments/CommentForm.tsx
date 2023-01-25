@@ -5,6 +5,8 @@ import { AuthStatuses, selectAuthData, selectAuthStatus } from '../auth/authSlic
 import { useForm } from 'react-hook-form';
 import { CommentFormInput, createCommentAsync, CreateCommentRequest, fetchCommentsAsync } from './commentSlice';
 import { useSearchParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../app/store';
 
 const commentSchema = yup.object({
     body: yup
@@ -18,7 +20,7 @@ const commentSchema = yup.object({
 /**
  * Form to create a new comment. Does input validation before sending the request.
  */
-function CommentForm(props: any) { // TODO: change todo type
+function CommentForm() {
     const { register, handleSubmit, reset, formState: { errors } } = useForm<CommentFormInput>({
         resolver: yupResolver(commentSchema),
     });
@@ -28,7 +30,7 @@ function CommentForm(props: any) { // TODO: change todo type
 
     const authData = useAppSelector(selectAuthData);
     const authStatus = useAppSelector(selectAuthStatus);
-    const dispatch = props.dispatch;
+    const dispatch = useDispatch<AppDispatch>();
 
     const onSubmit = async (input: CommentFormInput) => {
         // build request from input
