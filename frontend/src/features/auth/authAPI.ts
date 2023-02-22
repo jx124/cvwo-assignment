@@ -4,7 +4,7 @@ import { LoginFormInput, AuthData, SignupFormInput } from "./authSlice";
  * This file contains all API methods for logging in or signing up.
  */
 
-const API_URL = "http://localhost:3000";
+const API_URL = "https://cvwo-app.herokuapp.com";
 
 export async function sendLoginInfo(data: LoginFormInput) {
     return fetch(`${API_URL}/login`, {

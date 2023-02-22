@@ -1,6 +1,6 @@
 import { CommentsState, CreateCommentRequest, DeleteCommentRequest, UpdateCommentRequest } from "./commentSlice";
 
-const API_URL = "http://localhost:3000";
+const API_URL = "https://cvwo-app.herokuapp.com";
 
 /**
  * This file contains all API methods for comment CRUD operations.

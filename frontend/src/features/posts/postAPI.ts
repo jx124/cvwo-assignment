@@ -4,7 +4,7 @@ import { CreatePostRequest, DeletePostRequest, PostsState, UpdatePostRequest } f
  * This file contains all API methods for post CRUD operations.
  */
 
-const API_URL = "http://localhost:3000";
+const API_URL = "https://cvwo-app.herokuapp.com";
 
 export async function fetchPosts() {
     return fetch(`${API_URL}/posts.json`, {
