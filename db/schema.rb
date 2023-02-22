@@ -10,13 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_12_091807) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_22_080013) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "comments", force: :cascade do |t|
     t.text "body", null: false
-    t.integer "rating", default: 0,  null: false
+    t.integer "rating", default: 0
     t.bigint "post_id", null: false
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
@@ -29,7 +29,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_12_091807) do
     t.string "title", null: false
     t.text "body", null: false
     t.string "tags", default: [], null: false, array: true
-    t.integer "rating", default: 0, null: false
+    t.integer "rating", default: 0
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
