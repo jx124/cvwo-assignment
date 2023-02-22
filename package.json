@@ -1,0 +1,30 @@
+{
+  "name": "cvwo-assignment",
+  "engines": {
+    "node": "18.12.1",
+    "yarn": "1.22.19"
+  },
+  "scripts": {
+    "build": "yarn --cwd frontend install && yarn --cwd frontend build",
+    "deploy": "cp -a frontend/build/. public/",
+    "heroku-postbuild": "yarn build && yarn deploy"
+  },
+  "description": "Name: Neo Jie Xiang",
+  "version": "1.0.0",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jx124/cvwo-assignment.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jx124/cvwo-assignment/issues"
+  },
+  "homepage": "https://github.com/jx124/cvwo-assignment#readme"
+}
